@@ -1,0 +1,30 @@
+
+curl http://localhost:51000/payroll/api/persons
+
+
+# create person from scratch
+curl -X POST -H "Content-Type:application/json" -d '{ 
+	"firstName": "dan", 
+	"lastName": "suzuki",
+	"middleName" : "quiambao",
+	"affix" : "",
+	"age" : 29,
+	"gender" : "m",
+	"dateOfBirth" : "1984-11-21",
+	"civilStatus" : "single",
+	"currentResidence" : "makati city",
+	"permanentResidence" : "paranaque city"
+}' http://localhost:51000/payroll/api/persons
+
+# edit
+curl -X PATCH -H "Content-Type:application/json" -d '{ 
+	"age" : 30
+	
+}' http://localhost:51000/payroll/api/persons/1
+
+
+# create employee with existing person
+curl -X POST -H "Content-Type:application/json" -d '{ 
+	"employeeNumber" : "12346",
+	"person" : "http://localhost:51000/payroll/api/persons/1"
+}' http://localhost:51000/payroll/api/employees
