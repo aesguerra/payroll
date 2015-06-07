@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -55,6 +57,10 @@ public class Employee {
 	@OneToOne
 	@JoinColumn(name="employment_status_id",nullable=true)
 	private EmploymentStatus employmentStatus;
+	
+	@ManyToOne(targetEntity=Employee.class)
+	@JoinColumn(name="manager_employee_id", nullable=true)
+	private Employee manager;
 	
 	/**
 	 * @return the id
