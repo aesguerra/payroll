@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.minyo.payroll.references.EmploymentStatus;
+import org.minyo.payroll.references.Organization;
 
 
 @Entity
@@ -25,7 +27,7 @@ public class Employee {
 	@Column(name = "employee_id")
 	private long id;
 
-	@OneToOne(optional=false)
+	@OneToOne(optional=false,fetch=FetchType.EAGER)
 	@JoinColumn(name="person_id")
 	private Person person;
 	
@@ -54,13 +56,18 @@ public class Employee {
 	private Date dateHired;
 	
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="employment_status_id",nullable=true)
 	private EmploymentStatus employmentStatus;
 	
 	@ManyToOne(targetEntity=Employee.class)
 	@JoinColumn(name="manager_employee_id", nullable=true)
 	private Employee manager;
+	
+	@ManyToOne(targetEntity=Organization.class)
+	@JoinColumn(name="organization_id", nullable=true)
+	private Organization organization;
+	
 	
 	/**
 	 * @return the id
@@ -172,6 +179,62 @@ public class Employee {
 	 */
 	public void setTaxExemptionStatus(String taxExemptionStatus) {
 		this.taxExemptionStatus = taxExemptionStatus;
+	}
+
+	/**
+	 * @return the dateHired
+	 */
+	public Date getDateHired() {
+		return dateHired;
+	}
+
+	/**
+	 * @param dateHired the dateHired to set
+	 */
+	public void setDateHired(Date dateHired) {
+		this.dateHired = dateHired;
+	}
+
+	/**
+	 * @return the employmentStatus
+	 */
+	public EmploymentStatus getEmploymentStatus() {
+		return employmentStatus;
+	}
+
+	/**
+	 * @param employmentStatus the employmentStatus to set
+	 */
+	public void setEmploymentStatus(EmploymentStatus employmentStatus) {
+		this.employmentStatus = employmentStatus;
+	}
+
+	/**
+	 * @return the manager
+	 */
+	public Employee getManager() {
+		return manager;
+	}
+
+	/**
+	 * @param manager the manager to set
+	 */
+	public void setManager(Employee manager) {
+		this.manager = manager;
+	}
+
+	/**
+	 * @return the organization
+	 */
+	public Organization getOrganization() {
+		return organization;
+	}
+
+	/**
+	 * @param organization the organization to set
+	 */
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 	
 	

@@ -28,3 +28,9 @@ curl -X POST -H "Content-Type:application/json" -d '{
 	"employeeNumber" : "12346",
 	"person" : "http://localhost:51000/payroll/api/persons/1"
 }' http://localhost:51000/payroll/api/employees
+
+
+# shutdown
+curl -X POST http://localhost:59001/shutdown
+
+

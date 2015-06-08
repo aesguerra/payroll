@@ -37,6 +37,76 @@ public class Organization {
 	@ManyToOne(targetEntity=Employee.class)
 	@JoinColumn(name="manager_employee_id")
 	private Employee manager;
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the parent
+	 */
+	public Organization getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(Organization parent) {
+		this.parent = parent;
+	}
+
+	/**
+	 * @return the manager
+	 */
+	public Employee getManager() {
+		return manager;
+	}
+
+	/**
+	 * @param manager the manager to set
+	 */
+	public void setManager(Employee manager) {
+		this.manager = manager;
+	}
 	
 
 }
