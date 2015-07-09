@@ -1,56 +1,68 @@
 <div class="container">
 	<div class="row">
-		<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="isCollapsed = !isCollapsed">
-	  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-		</button>
-		<div class="person-div-collapse-panel" collapse="isCollapsed">
-			<div class="panel panel-default">
-				<!-- Default panel contents -->
-				<div class="panel-heading"><h5>Add Person</h5></div>
-				<div class="panel-body">
-					<div class="col-md-4">
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Last Name" ng-model="person.lastName">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="First Name" ng-model="person.firstName">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Middle Name" ng-model="person.middleName">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Affix" ng-model="person.affix">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Age" ng-model="person.age">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Gender" ng-model="person.gender">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Date of Birth" ng-model="person.dateOfBirth">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Civil Status" ng-model="person.civilStatus">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Permanent Residence" ng-model="person.permanentResidence">
-						</div>
-						<div class="form-group">
-						    <input type="text" class="form-control" placeholder="Current Residence" ng-model="person.currentResidence">
-						</div>
-						<div class="form-group">
-							<button class="btn btn-primary" ng-click="addPerson(person)" type="submit">Submit</button>
-						</div>
-					</div>
-				</div> 
-			</div>
-		</div>
-		<table id="person-table"></table>
+       	<div class="columns columns-right btn-group pull-right custom-toolbar">
+	       	<button type="button" class="btn btn-default" aria-label="Left Align" ng-click="open()">
+  				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			</button>
+	   	</div>
+		<table id="table-person"></table>
 	</div>
 </div>
 <style>
 .person-div-collapse-panel {
 	margin-top: 10px;
 }
+.custom-toolbar {
+	padding-top: 10px;
+	padding-left: 10px;
+}
 </style>
+<script type="text/ng-template" id="person-detail.html">
+<div >
+<div class="modal-header">
+    <h3 class="modal-title"></h3>
+</div>
+<div class="modal-body">
+<div class="container-fluid">
+          <div class="row">
+    <div class="col-md-4">
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Last Name" ng-model="person.lastName">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="First Name" ng-model="person.firstName">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Middle Name" ng-model="person.middleName">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Affix" ng-model="person.affix">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Age" ng-model="person.age">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Gender" ng-model="person.gender">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Date of Birth" ng-model="person.dateOfBirth">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Civil Status" ng-model="person.civilStatus">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Permanent Residence" ng-model="person.permanentResidence">
+	</div>
+	<div class="form-group">
+	    <input type="text" class="form-control" placeholder="Current Residence" ng-model="person.currentResidence">
+	</div>
+	</div>
+	</div>
+</div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="doAction(person)" type="submit">{{action}}</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
+</div>
+    </script>

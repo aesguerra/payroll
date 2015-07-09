@@ -1,28 +1,22 @@
 <!DOCTYPE html>
-<html ng-app="MinyoApp"><!-- Hello world! -->
-<head>
+<html ng-app="MinyoApp">
+<head><!-- Hello -->
 <meta charset="UTF-8">
 <title>Minyo - Main</title>
 <script type="text/javascript" src="scripts/jquery-2.1.1/jquery-2.1.1.min.js"></script>
-
-
-
-
-
 <script type="text/javascript" src="scripts/angular-1.3.15/angular.min.js"></script>
 <script type="text/javascript" src="scripts/angular-1.3.15/angular-resource.min.js"></script>
 <script type="text/javascript" src="scripts/angular-1.3.15/angular-route.min.js"></script>
 <script type="text/javascript" src="scripts/ui-bootstrap-tpls-0.13.0/ui-bootstrap-tpls-0.13.0.min.js"></script>
 
-
 <script type="text/javascript" src="scripts/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="scripts/bootstrap-table-master/src/bootstrap-table.js"></script>
-<!-- <script type="text/javascript" src="scripts/bootstrap-table-master/dist/extensions/editable/bootstrap-table-editable.min.js"></script> -->
-<!-- <script type="text/javascript" src="scripts/bootstrap-table-master/src/extensions/editable/raw/bootstrap-editable.js"></script> -->
+
+<script type="text/javascript" src="scripts/payroll-scripts/apps/app.js"></script>
 
 <link rel="stylesheet" type="text/css" href="scripts/bootstrap-3.3.4-dist/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="scripts/bootstrap-table-master/src/bootstrap-table.css">
-<!-- <link rel="stylesheet" type="text/css" href="scripts/bootstrap-table-master/src/extensions/editable/raw/bootstrap-editable.css"> -->
+<link rel="stylesheet" type="text/css" href="themes/simple-sidebar.css"> 
 <script>
 /* 
  * -----------------------------------------------------------------------------------------------------
@@ -37,151 +31,27 @@
  * -----------------------------------------------------------------------------------------------------
  */
 
-// App
-var minyoApp = angular.module('MinyoApp', ['ngResource', 'ngRoute', 'MinyoControllers']);
 
-// Controllers
-var minyoControllers = angular.module('MinyoControllers', ['MinyoServices', 'ui.bootstrap']);
-
-minyoControllers.controller('MinyoController', function($scope) {
-	$scope.home = "Home";
-});
-
-minyoControllers.controller('PersonController', function($scope, PersonService, PersonTool) {	
-
-	$scope.isCollapsed = true;
-	PersonTool.TableInit(PersonTool.TableHeader);
-
-	PersonService.query(function(data) {
-		PersonTool.TableLoad(data._embedded.persons);
-	}, function() {
-		console.log('Error.');
-	});
-	
-	
-	$scope.addPerson = function(person) {
-		console.log('Adding person: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-		PersonTool.InsertRow(person);
-		console.log('Person Added: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-		
-		PersonService.add(person, function() {
-			alert('Successfully added ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName + '.')
-			PersonTool.ClearFields(person);
-		}, function() {
-			alert('Oops! Something smelly happened back there. Adding of person failed.')
-		});
-	};
-	
-	$scope.updatePerson = function(person) {
-		console.log('Updating person: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-		
-		
-	}
-});
-
-// Route Provider	
-minyoApp.config(['$routeProvider',
-	function($routeProvider) {
-		$routeProvider.
-		when('/', {	templateUrl: 'views/home.html', controller: 'MinyoControllers' }).
-		when('/home', {	templateUrl: 'views/home.html', controller: 'MinyoController' }).
-		when('/person', { templateUrl: 'views/person.html', controller: 'PersonController' }).
-		otherwise({ redirectTo: '/' });
-	}
-]);
-
-// Services
-var minyoServices = angular.module('MinyoServices', []);
-
-minyoServices.factory('PersonService', function($resource){
-	return $resource('http://localhost:51000/payroll/api/persons', { }, 
-			{ 
-				'query': { 'method' : 'GET', isArray: false },
-				'add' : { 'method' : 'POST' },
-				'update': { 'method' : 'PUT' }
-			});
-});
-
-minyoServices.factory('PersonTool', function() {
-
-	return {
-		TableHeader: [{ field : '_links', visible: false },
-		              { field : 'action', title: 'Action', align: 'center',
-			      	  	formatter: function (value, row, index) {
-			      			return [
-			      			        '<a class="edit" href="javascript:void(0)" title="Edit">',
-			      			        '<i class="glyphicon glyphicon-edit"></i>',
-			      			        '</a> ',
-			      			        '<a class="remove" href="javascript:void(0)" title="Remove">',
-			      			        '<i class="glyphicon glyphicon-remove"></i>',
-			      			        '</a>'
-			      			    ].join('');
-			      		},
-			      		events:
-			      			window.actionEvents = {
-			      			    'click .edit': function (e, value, row, index) {
-			      			        alert('You click edit icon, row: ' + JSON.stringify(row));
-			      			        console.log(value, row, index);
-			      			    },
-			      			    'click .remove': function (e, value, row, index) {
-			      			        alert('You click remove icon, row: ' + JSON.stringify(row));
-			      			        console.log(value, row, index);
-			      			    }
-			      			}  
-		              },
-	                  { field : 'lastName', title: 'Last Name', sortable: true },
-	                  { field : 'firstName', title: 'First Name', sortable: true },
-	                  { field : 'middleName', title : 'Middle Name', sortable: true  },
-	                  { field : 'affix', title : 'Affix', sortable: true  },
-	                  { field : 'age', title : 'Age', sortable: true },
-	                  { field : 'gender', title : 'Gender', sortable: true },
-	                  { field : 'dateOfBirth', title : 'Date of Birth', sortable: true },
-	                  { field : 'civilStatus', title : 'Civil Status', sortable: true },
-	                  { field : 'permanentResidence', title : 'Permanent Residence' },
-	                  { field : 'currentResidence', title : 'Current Residence' }],
-	                  
-		TableInit: function(header) {
-			$('#person-table').bootstrapTable({
-				classes: "table table-hover table-condensed",
-			    search:"true",
-			    searchAlign: "right",
-			    height: "600",
-			    columns: header,
-			    showRefresh: true,
-			    showToggle: true
-			});
-		},
-		TableLoad: function(data) {
-			$('#person-table').bootstrapTable('load', data);
-		},
-		InsertRow: function(data) {
-			$('#person-table').bootstrapTable('prepend', data);
-		},
-		UpdateRow: function(data) {
-			$('#person-table').bootstrapTable('updateRow', {
-                index: 1,
-                row: data
-            });
-		},
-		ClearFields: function(data) { // gawin tong generic next time
-			data.lastName = '';
-			data.firstName = '';
-			data.middleName = '';
-			data.affix = '';
-			data.age = '';
-			data.gender = '';
-			data.dateOfBirth = '';
-			data.civilStatus = '';
-			data.permanentResidence = '';
-			data.currentResidence = '';
-		}
-	};
-});
-
-	
 </script>
+<style>
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+body {
+    background-image: url("themes/bg-login.png");
+    background-repeat: repeat;
+}
+
+table {
+	background-color:#FAFAFA;
+}
+</style>
 </head>
-<body ng-controller="PersonController">
-<div ng-view></div>
+<body>
+<div id="wrapper">
+	<mog-sidebar ng-controller="MinyoController"></mog-sidebar>
+	<div id="page-content-wrapper" ng-controller="PersonController" ng-view>
+		<mog-home></mog-home>
+	</div>
+</div>
 </body>
 </html>
