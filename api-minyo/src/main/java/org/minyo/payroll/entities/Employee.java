@@ -1,7 +1,9 @@
 package org.minyo.payroll.entities;
 
 import java.sql.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.minyo.payroll.references.EmployeeType;
 import org.minyo.payroll.references.EmploymentStatus;
 import org.minyo.payroll.references.Organization;
 
@@ -68,6 +71,13 @@ public class Employee {
 	@JoinColumn(name="organization_id", nullable=true)
 	private Organization organization;
 	
+	
+	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL)
+	private Set<EmployeeDependent> dependents;
+	
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="employee_type_id",nullable=true)
+	private EmployeeType employeeType;
 	
 	/**
 	 * @return the id
@@ -235,6 +245,34 @@ public class Employee {
 	 */
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
+	}
+
+	/**
+	 * @return the dependents
+	 */
+	public Set<EmployeeDependent> getDependents() {
+		return dependents;
+	}
+
+	/**
+	 * @param dependents the dependents to set
+	 */
+	public void setDependents(Set<EmployeeDependent> dependents) {
+		this.dependents = dependents;
+	}
+
+	/**
+	 * @return the employeeType
+	 */
+	public EmployeeType getEmployeeType() {
+		return employeeType;
+	}
+
+	/**
+	 * @param employeeType the employeeType to set
+	 */
+	public void setEmployeeType(EmployeeType employeeType) {
+		this.employeeType = employeeType;
 	}
 	
 	

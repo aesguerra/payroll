@@ -39,6 +39,15 @@ curl -X POST -H "Content-Type:application/json" -d '{
 }' http://localhost:51000/payroll/api/employees
 
 
+
+
+# create employee dependents with existing employee
+curl -v -X PATCH -H "Content-Type:application/json" -d '{"dependents" : {"firstName" : "rocky","lastName" : "ichibon","dateOfBirth" : "1996-08-06"}}' http://localhost:51000/payroll/api/employees/1
+
+
+
+
+
 # shutdown
 curl -X POST http://localhost:59001/shutdown
 
