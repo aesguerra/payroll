@@ -1,38 +1,33 @@
 package org.minyo.payroll.references;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name="ref_employment_status")
-public class EmploymentStatus {
+@Table(name="ref_payroll_type")
+public class PayrollType {
 	
 	@Id
-	@Column(name="employment_status_id")
 	@GeneratedValue(strategy=GenerationType.TABLE)
-	private int id;
+	@Column(name="payroll_type_id")
+	private long id;
 	
-	@Column(name="employment_status_name")
+	@Column(name="payroll_type_name")
 	private String name;
 	
-	@Column(name="employment_status_description")
+	@Column(name="payroll_type_description")
 	private String description;
 
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -63,10 +58,6 @@ public class EmploymentStatus {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-
-	
-	
 	
 	
 

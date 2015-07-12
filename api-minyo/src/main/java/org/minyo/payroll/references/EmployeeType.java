@@ -19,10 +19,10 @@ public class EmployeeType {
 	
 	
 	@Column(name = "employee_type_name")
-	private String employeeTypeName;
+	private String name;
 	
 	@Column(name = "employee_type_description")
-	private String employeeTypeDescription;
+	private String description;
 
 	/**
 	 * @return the id
@@ -39,32 +39,33 @@ public class EmployeeType {
 	}
 
 	/**
-	 * @return the employeeTypeName
+	 * @return the name
 	 */
-	public String getEmployeeTypeName() {
-		return employeeTypeName;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * @param employeeTypeName the employeeTypeName to set
+	 * @param name the name to set
 	 */
-	public void setEmployeeTypeName(String employeeTypeName) {
-		this.employeeTypeName = employeeTypeName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
-	 * @return the employeeTypeDescription
+	 * @return the description
 	 */
-	public String getEmployeeTypeDescription() {
-		return employeeTypeDescription;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * @param employeeTypeDescription the employeeTypeDescription to set
+	 * @param description the description to set
 	 */
-	public void setEmployeeTypeDescription(String employeeTypeDescription) {
-		this.employeeTypeDescription = employeeTypeDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
+
 	
 	
 	

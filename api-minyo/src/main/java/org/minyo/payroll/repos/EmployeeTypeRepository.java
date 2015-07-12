@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "employee-types", path = "employee-types")
+@RepositoryRestResource(collectionResourceRel = "reference employee types", path = "employee-types")
 public interface EmployeeTypeRepository extends CrudRepository<EmployeeType, Long>{
 
 }

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.minyo.payroll.references.PayrollStatus;
+
 @Entity
 @Table(name="tbl_payroll_current")
 public class PayrollCurrent {
@@ -13,7 +15,6 @@ public class PayrollCurrent {
 	@GeneratedValue(strategy=GenerationType.TABLE)
 	@Column(name="payroll_id")
 	private long id;
-	
 	
 	@Column(name="start_date")
 	private Date startDate;
@@ -24,6 +25,12 @@ public class PayrollCurrent {
 	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL)
 	private Set<EmployeePayroll> employees;
 
+	
+	@ManyToOne(targetEntity=PayrollStatus.class)
+	@JoinColumn(name="payroll_status_id")
+	private PayrollStatus payrollStatus;
+	
+	
 	/**
 	 * @return the id
 	 */
@@ -78,5 +85,19 @@ public class PayrollCurrent {
 	 */
 	public void setEmployees(Set<EmployeePayroll> employees) {
 		this.employees = employees;
+	}
+
+	/**
+	 * @return the payrollStatus
+	 */
+	public PayrollStatus getPayrollStatus() {
+		return payrollStatus;
+	}
+
+	/**
+	 * @param payrollStatus the payrollStatus to set
+	 */
+	public void setPayrollStatus(PayrollStatus payrollStatus) {
+		this.payrollStatus = payrollStatus;
 	}
 }
