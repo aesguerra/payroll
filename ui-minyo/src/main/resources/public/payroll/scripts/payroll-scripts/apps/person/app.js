@@ -4,7 +4,7 @@
 
 
 // Controllers
-minyoControllers.controller('PersonController', function($scope, $modal, PersonService, PersonTool) {	
+minyoControllers.controller('PersonController', function($scope, $location, $modal, PersonService, PersonTool, EmpCache) {	
 
 	$scope.isCollapsed = true;
 	PersonTool.TableInit(PersonTool.TableHeader);
@@ -15,12 +15,19 @@ minyoControllers.controller('PersonController', function($scope, $modal, PersonS
 		console.log('Error.');
 	});
 	
-	$scope.open = PersonTool.OpenModal;
+	$scope.open = function(b) {
+		$location.path("/empdet");//PersonTool.OpenModal;
+		EmpCache.setAction(b);
+	}
 	
 	$scope.updatePerson = function(person) {
 		console.log('Updating person: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
 	}
 	
+});
+
+minyoControllers.controller('EmpDetCtrl', function($scope, EmpCache) {
+	$scope.action = EmpCache.getAction();
 });
 
 minyoControllers.controller('PersonModalInstanceCtrl', function($scope, $modalInstance, PersonService, PersonTool, personData, action) {
@@ -59,6 +66,24 @@ minyoControllers.controller('PersonModalInstanceCtrl', function($scope, $modalIn
 	  	$modalInstance.dismiss('cancel');
 	};
 });
+
+minyoControllers.service('EmpCache', function() {
+	var action = '';
+	
+	var setAction = function(a) {
+		action = a;
+	};
+	
+	var getAction = function(){
+		return action;
+	};
+	
+	return {
+		setAction: setAction,
+		getAction: getAction
+	};
+});
+
 
 // Services
 minyoServices.factory('PersonService', function($resource){

@@ -1,0 +1,206 @@
+<div class="panel panel-default">
+ 	<div class="panel-heading"><h4>{{action}} Employee</h4></div>
+  <div class="panel-body">
+    <div class="container-fluid" ng-controller="EmpDetCtrl">
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Last Name</label>
+				    <input type="text" class="form-control" ng-model="person.lastName">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">First Name</label>
+		    		<input type="text" class="form-control" ng-model="person.firstName">
+				</div>
+			</div>
+			<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Middle Name</label>
+		    		<input type="text" class="form-control" ng-model="person.middleName">
+				</div>
+			</div>
+			<div class="col-sm-2">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Affix</label>
+		    		<input type="text" class="form-control" ng-model="person.affix">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Gender</label>
+		   			<input type="text" class="form-control" ng-model="person.gender">
+				</div>
+			</div>
+			<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Date of Birth</label>
+		    		<input type="text" class="form-control" ng-model="person.dateOfBirth">
+				</div>
+			</div>
+			<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Civil Status</label>
+		    <input type="text" class="form-control" ng-model="person.civilStatus">
+				</div>
+			</div>
+			<div class="col-sm-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Age</label>
+		    		<input type="text" class="form-control" ng-model="person.age">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-12">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Permanent Residence</label>
+		    		<input type="text" class="form-control" ng-model="person.permanentResidence">
+				</div>
+			</div>
+			<div class="col-md-12">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Current Residence</label>
+		    		<input type="text" class="form-control" ng-model="person.currentResidence">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3"><h4>Spouse</h4></div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Last Name</label>
+				    <input type="text" class="form-control" ng-model="person.spouseLastName">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">First Name</label>
+		    		<input type="text" class="form-control" ng-model="person.spouseFirstName">
+				</div>
+			</div>
+			<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Middle Name</label>
+		    		<input type="text" class="form-control" ng-model="person.spouseMiddleName">
+				</div>
+			</div>
+			<div class="col-sm-2">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Affix</label>
+		    		<input type="text" class="form-control" ng-model="person.spouseAffix">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Date of Birth</label>
+		    		<input type="text" class="form-control" ng-model="person.spouseDateOfBirth">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Occupation</label>
+		    		<input type="text" class="form-control" ng-model="person.spouseOccupation">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3"><h4>Parent - Father</h4></div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Last Name</label>
+				    <input type="text" class="form-control" ng-model="person.fatherLastName">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">First Name</label>
+		    		<input type="text" class="form-control" ng-model="person.fatherFirstName">
+				</div>
+			</div>
+			<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Middle Name</label>
+		    		<input type="text" class="form-control" ng-model="person.fatherMiddleName">
+				</div>
+			</div>
+			<div class="col-sm-2">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Affix</label>
+		    		<input type="text" class="form-control" ng-model="person.fatherAffix">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Date of Birth</label>
+		    		<input type="text" class="form-control" ng-model="person.fatherDateOfBirth">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Occupation</label>
+		    		<input type="text" class="form-control" ng-model="person.fatherOccupation">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3"><h4>Parent - Mother</h4></div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Last Name</label>
+				    <input type="text" class="form-control" ng-model="person.motherFirstName">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">First Name</label>
+		    		<input type="text" class="form-control" ng-model="person.motherFirstName">
+				</div>
+			</div>
+			<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Middle Name</label>
+		    		<input type="text" class="form-control" ng-model="person.motherMiddleName">
+				</div>
+			</div>
+			<div class="col-sm-2">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Affix</label>
+		    		<input type="text" class="form-control" ng-model="person.motherAffix">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+		  	<div class="col-md-3">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Date of Birth</label>
+		    		<input type="text" class="form-control" ng-model="person.motherDateOfBirth">
+				</div>
+			</div>
+			<div class="col-md-4">
+			  	<div class="form-group">
+			    	<label for="exampleInputEmail1">Occupation</label>
+		    		<input type="text" class="form-control" ng-model="person.motherOccupation">
+				</div>
+			</div>
+		</div>
+		<button class="btn btn-primary" ng-click="doAction(person)" type="submit">{{action}}</button>
+	    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+		</div>
+	</div>
+</div>
+
+

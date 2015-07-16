@@ -18,6 +18,7 @@ minyoApp.config(['$routeProvider',
 		when('/', {	templateUrl: 'views/home.html', controller: 'MinyoControllers' }).
 		when('/home', {	templateUrl: 'views/home.html', controller: 'MinyoController' }).
 		when('/person', { templateUrl: 'views/person.html', controller: 'PersonController' }).
+		when('/empdet', { templateUrl: 'views/employee-detail.html', controller: 'EmpDetCtrl' }).
 		when('/paygen', { templateUrl: 'views/payroll-gen.html', controller: 'PaygenController' }).
 		otherwise({ redirectTo: '/' });
 	}
