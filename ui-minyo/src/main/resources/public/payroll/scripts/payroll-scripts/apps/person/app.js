@@ -1,74 +1,84 @@
 /**
- * Apps - Person
+ * Apps - Employee
  */
 
-
 // Controllers
-minyoControllers.controller('PersonController', function($scope, $location, $modal, PersonService, PersonTool, EmpCache) {	
-
-	$scope.isCollapsed = true;
-	PersonTool.TableInit(PersonTool.TableHeader);
-
-	PersonService.query(function(data) {
-		PersonTool.TableLoad(data._embedded.persons);
+minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, EmpService) {
+	$scope.data = {};
+	
+	EmpService.query(function(data) {
+		$scope.data = data._embedded.persons;
 	}, function() {
 		console.log('Error.');
 	});
 	
 	$scope.open = function(b) {
-		$location.path("/empdet");//PersonTool.OpenModal;
+		$location.path('/empdet');
 		EmpCache.setAction(b);
 	}
 	
-	$scope.updatePerson = function(person) {
-		console.log('Updating person: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-	}
+	$scope.removeRow = function(i, d){			
+		var empFullName = d.lastName + " " + d.firstName + " " + d.middleName;	
+		var r = confirm("Delete person " + empFullName + "?");
+		if (r == true) {
+			var href = d._links.self.href;
+			EmpService.remove({id: href.substring(href.lastIndexOf('/') + 1)}, function() {
+				alert('Person ' + empFullName + ' has been removed.');
+				$scope.data.splice(i, 1);
+			});
+		}
+	};
 	
+	$scope.edit = function(d) {
+		EmpCache.setAction('Update');
+    	EmpCache.setData(d);
+    	$location.path('/empdet');
+	};
 });
 
-minyoControllers.controller('EmpDetCtrl', function($scope, EmpCache) {
+minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, EmpService) {
 	$scope.action = EmpCache.getAction();
-});
-
-minyoControllers.controller('PersonModalInstanceCtrl', function($scope, $modalInstance, PersonService, PersonTool, personData, action) {
-	$scope.person = personData;
-	$scope.action = action;
-
-	if(action == undefined) {
-		$scope.action = 'Add';
+	
+	if($scope.action == 'Update') {
+		$scope.emp = EmpCache.getData();
 	}
 	
-	$scope.doAction = function(person) {
-		if($scope.action == 'Add') {
-			PersonService.add(person, function() {
-				alert('Successfully added ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName + '.');
-				console.log('Person Added: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-				PersonTool.ClearFields(person);
-				PersonTool.InsertRow(person);
+	$scope.cancel = function() {
+		var r = confirm('Are you sure you want to cancel?');
+		if (r == true) {
+			alert('Cancelled. Going back to Employees link..');
+			console.log('Cancelled.');
+			$location.path('/person');
+		}
+	};
+	
+	$scope.doAction = function(emp) {
+		console.log('Do action for ' + JSON.stringify(emp) + ', action: ' + $scope.action);
+		var empFullName = emp.lastName + ' ' + emp.firstName + ' ' + emp.middleName;
+		if($scope.action == 'Hire') {
+			EmpService.add(emp, function() {
+				alert('Successfully added ' + empFullName + '.');
+				console.log('Added employee ' + empFullName);
+				$location.path('/person');
 			}, function() {
-				alert('Oops! Something smelly happened back there. Adding of person failed.');
+				alert('Oops! Something smelly happened back there. Adding of employee failed.');
 			});
 		}
 		if($scope.action == 'Update') {
-			console.log('Updating person: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-			var href = $scope.person._links.self.href;
-			PersonService.update({id: href.substring(href.lastIndexOf('/') + 1)}, person, function() {
-				alert('Successfully updated ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName + '.');
-				console.log('Person Updated: ' + person.lastName + ' ' + person.firstName + ' ' + person.middleName);
-				PersonTool.UpdateRow(href.substring(href.lastIndexOf('/') + 1), person);
+			console.log('Updating employee ' + empFullName);
+			var href = $scope.emp._links.self.href;
+			EmpService.update({id: href.substring(href.lastIndexOf('/') + 1)}, emp, function() {
+				alert('Successfully updated ' + empFullName + '.');
+				console.log('Updated employee ' + empFullName);
+				$location.path('/person');
 			});
 		}
-		$modalInstance.close('OK');
-	};
-	
-	$scope.cancel = function () {
-		console.log('Cancelled.');
-	  	$modalInstance.dismiss('cancel');
 	};
 });
 
 minyoControllers.service('EmpCache', function() {
 	var action = '';
+	var data = '';
 	
 	var setAction = function(a) {
 		action = a;
@@ -77,16 +87,26 @@ minyoControllers.service('EmpCache', function() {
 	var getAction = function(){
 		return action;
 	};
+
+	var setData = function(d) {
+		data = d;
+	}
+	
+	var getData = function() {
+		return data;
+	};
 	
 	return {
 		setAction: setAction,
-		getAction: getAction
+		getAction: getAction,
+		setData: setData,
+		getData: getData
 	};
 });
 
 
 // Services
-minyoServices.factory('PersonService', function($resource){
+minyoServices.factory('EmpService', function($resource){
 	return  $resource('http://localhost:51000/payroll/api/persons/:id', { id: '@id'}, 
 			{ 
 		query: { uri:'http://localhost:51000/payroll/api/persons', 'method' : 'GET', isArray: false },
@@ -97,112 +117,3 @@ minyoServices.factory('PersonService', function($resource){
 	});
 });
 
-minyoServices.factory('PersonTool', function($modal, PersonService) {
-	var showModal = function (action, personData) {
-		$modal.open({
-		      animation: true,
-		      templateUrl: 'person-detail.html',
-		      controller: 'PersonModalInstanceCtrl',
-		      size: 'lg',
-		      backdrop: 'static',
-		      resolve: {
-		    	  action: function() {
-		    		  return action;
-		    	  },
-		    	  personData: function() {
-		    		  return personData;
-		    	  }
-		      }
-		    });
-	};
-	
-	var removeRow = function(idx) { $('#table-person').bootstrapTable('hideRow', { index: idx }) };
-	
-	return {
-		OpenModal: showModal,
-		TableHeader: [{ field : 'action', title: 'Action', align: 'center',
-			      	  	formatter: function (value, row, index) {
-			      			return [
-			      			        '<a class="edit" href="javascript:void(0)" title="Edit">',
-			      			        '<i class="glyphicon glyphicon-edit"></i>',
-			      			        '</a> ',
-			      			        '<a class="remove" href="javascript:void(0)" title="Remove">',
-			      			        '<i class="glyphicon glyphicon-remove"></i>',
-			      			        '</a>'
-			      			    ].join('');
-			      		},
-			      		events:
-			      			window.actionEvents = {
-			      			    'click .edit': function (e, value, row, index) {
-			      			    	// alert('You click edit icon, row: ' + JSON.stringify(row));
-			      			    	var href = row._links.self.href;
-				      			    PersonService.get({id: href.substring(href.lastIndexOf('/') + 1)}, function(data) {
-				      			    	showModal('Update', data);
-				      			    });
-			      			    },
-			      			    'click .remove': function (e, value, row, index) {
-			      			        //alert('You click remove icon, row: ' + JSON.stringify(row));
-									var r = confirm("Delete person " + row.lastName + " " + row.firstName + " " + row.middleName + "?");
-									if (r == true) {
-										var href = row._links.self.href;
-										PersonService.remove({id: href.substring(href.lastIndexOf('/') + 1)}, function() {
-											alert('Person ' + row.lastName + " " + row.firstName + " " + row.middleName + ' has been removed.');
-											removeRow(index);
-										});
-									}
-			      			    }
-			      			}  
-		              },
-	                  { field : '_links', visible: false, formatter: function(value, row) {
-	                	  return value.self.href;
-	                  } },
-	                  { field : 'lastName', title: 'Last Name', sortable: true },
-	                  { field : 'firstName', title: 'First Name', sortable: true },
-	                  { field : 'middleName', title : 'Middle Name', sortable: true  },
-	                  { field : 'affix', title : 'Affix', sortable: true  },
-	                  { field : 'age', title : 'Age', sortable: true },
-	                  { field : 'gender', title : 'Gender', sortable: true },
-	                  { field : 'dateOfBirth', title : 'Date of Birth', sortable: true },
-	                  { field : 'civilStatus', title : 'Civil Status', sortable: true },
-	                  { field : 'permanentResidence', title : 'Permanent Residence' },
-	                  { field : 'currentResidence', title : 'Current Residence' }],
-	                  
-		TableInit: function(header) {
-			$('#table-person').bootstrapTable({
-				classes: "table table-hover table-condensed",
-			    toolbar: '#toolbar',
-			    search:"true",
-			    buttonsAlign: 'right',
-			    searchAlign: "left",
-			    height: "600",
-			    columns: header,
-			    showRefresh: true,
-			    showToggle: true
-			});
-		},
-		TableLoad: function(data) {
-			$('#table-person').bootstrapTable('load', data);
-		},
-		InsertRow: function(data) {
-			$('#table-person').bootstrapTable('prepend', data);
-		},
-		UpdateRow: function(idx, data) {
-			$('#table-person').bootstrapTable('updateRow', {
-             index: idx,
-             row: data
-         });
-		},
-		ClearFields: function(data) { // gawin tong generic next time
-			data.lastName = '';
-			data.firstName = '';
-			data.middleName = '';
-			data.affix = '';
-			data.age = '';
-			data.gender = '';
-			data.dateOfBirth = '';
-			data.civilStatus = '';
-			data.permanentResidence = '';
-			data.currentResidence = '';
-		}
-	};
-});
