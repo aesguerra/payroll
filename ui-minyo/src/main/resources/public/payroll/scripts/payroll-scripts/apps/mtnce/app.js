@@ -1,12 +1,12 @@
 /**
- * Apps - Employee
+ * Apps - Maintenance - Compensation 
  */
 
 // Controllers
-minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, EmpService) {
+minyoControllers.controller('MtnceCmpenCtrl', function($scope, $location, MtnceCmpenCache, MtnceCmpenService) {
 	$scope.data = {};
 	
-	EmpService.query(function(data) {
+	MtnceCmpenService.query(function(data) {
 		$scope.data = data._embedded.persons;
 	}, function() {
 		console.log('Error.');
@@ -14,7 +14,7 @@ minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, Emp
 	
 	$scope.open = function(b) {
 		$location.path('/empdet');
-		EmpCache.setAction(b);
+		MtnceCmpenCache.setAction(b);
 	}
 	
 	$scope.removeRow = function(i, d){			
@@ -22,7 +22,7 @@ minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, Emp
 		var r = confirm("Delete person " + empFullName + "?");
 		if (r == true) {
 			var href = d._links.self.href;
-			EmpService.remove({id: href.substring(href.lastIndexOf('/') + 1)}, function() {
+			MtnceCmpenService.remove({id: href.substring(href.lastIndexOf('/') + 1)}, function() {
 				alert('Person ' + empFullName + ' has been removed.');
 				$scope.data.splice(i, 1);
 			});
@@ -30,17 +30,17 @@ minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, Emp
 	};
 	
 	$scope.edit = function(d) {
-		EmpCache.setAction('Update');
-    	EmpCache.setData(d);
+		MtnceCmpenCache.setAction('Update');
+		MtnceCmpenCache.setData(d);
     	$location.path('/empdet');
 	};
 });
 
-minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, EmpService) {
-	$scope.action = EmpCache.getAction();
+minyoControllers.controller('MtnceCmpenCtrl', function($scope, $location, MtnceCmpenCache, MtnceCmpenService) {
+	$scope.action = MtnceCmpenCache.getAction();
 	
 	if($scope.action == 'Update') {
-		$scope.emp = EmpCache.getData();
+		$scope.emp = MtnceCmpenCache.getData();
 	}
 	
 	$scope.cancel = function() {
@@ -56,7 +56,7 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 		console.log('Do action for ' + JSON.stringify(emp) + ', action: ' + $scope.action);
 		var empFullName = emp.lastName + ' ' + emp.firstName + ' ' + emp.middleName;
 		if($scope.action == 'Hire') {
-			EmpService.add(emp, function() {
+			MtnceCmpenService.add(emp, function() {
 				alert('Successfully added ' + empFullName + '.');
 				console.log('Added employee ' + empFullName);
 				$location.path('/person');
@@ -67,7 +67,7 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 		if($scope.action == 'Update') {
 			console.log('Updating employee ' + empFullName);
 			var href = $scope.emp._links.self.href;
-			EmpService.update({id: href.substring(href.lastIndexOf('/') + 1)}, emp, function() {
+			MtnceCmpenService.update({id: href.substring(href.lastIndexOf('/') + 1)}, emp, function() {
 				alert('Successfully updated ' + empFullName + '.');
 				console.log('Updated employee ' + empFullName);
 				$location.path('/person');
@@ -76,7 +76,7 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 	};
 });
 
-minyoControllers.service('EmpCache', function() {
+minyoControllers.service('MtnceCmpenCache', function() {
 	var action = '';
 	var data = '';
 	
@@ -106,14 +106,13 @@ minyoControllers.service('EmpCache', function() {
 
 
 // Services
-minyoServices.factory('EmpService', function($resource){
-	return  $resource('http://localhost:51000/payroll/api/persons/:id', { id: '@id'}, 
+minyoServices.factory('MtnceCmpenService', function($resource){
+	return  $resource('http://localhost:51000/payroll/api/organizations/:id', { id: '@id'}, 
 			{ 
-		query: { uri:'http://localhost:51000/payroll/api/persons', 'method' : 'GET', isArray: false },
+		query: { uri:'http://localhost:51000/payroll/api/organizations', 'method' : 'GET', isArray: false },
 		get: { method : 'GET', isArray: false },
 		add : { method : 'POST' },
 		update: { method : 'PUT' },
 		remove: { method: 'DELETE'}
 	});
 });
-

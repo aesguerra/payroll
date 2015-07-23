@@ -17,11 +17,9 @@
 					<thead>
 						<tr class="table-label">
 							<td>Action</td>
-							<td>Last Name</td>
-							<td>First Name</td>
-							<td>Middle Name</td>
-							<td>Affix</td>
-							<td>Age</td>
+							<td>ID</td>
+							<td>Name</td>
+							<td>Description</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -30,11 +28,9 @@
 								<a role="button" ng-click="edit(d)"><span class="glyphicon glyphicon-edit"></span></a>
 								<a role="button" ng-click="removeRow($index, d)"><span class="glyphicon glyphicon-remove"></span></a>
 							</td>
-							<td>{{d.lastName}}</td>
-							<td>{{d.firstName}}</td>
-							<td>{{d.middleName}}</td>
-							<td>{{d.affix}}</td>
-							<td>{{d.age}}</td>
+							<td>{{d.compensation_id}}</td>
+							<td>{{d.compensation_name}}</td>
+							<td>{{d.compensation_desription}}</td>
 						</tr>
 					</tbody>
 				</table>
