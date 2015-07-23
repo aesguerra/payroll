@@ -3,12 +3,39 @@
  */
 
 // Controllers
-minyoControllers.controller('TimeCtrl', function($scope, $interval) {
+minyoControllers.controller('TimeCtrl', function($scope, $interval, $timeout, TimeTool) {
+	$scope.info = true;
 
-    $scope.callAtInterval = function() {
+	$scope.punch = function() {
+    	alert("Employee number " + $scope.empNo + " has been logged at time " + $scope.currDateTime);
+    };
+    
+    var onTimeout = function() {
     	var dttm = new Date();
-        console.log((dttm.getMonth() + 1) + "-" +dttm.getDate() + "-" + dttm.getFullYear() + " ");
-    }
+    	$scope.currDateTime = TimeTool.prettyfyTime(dttm.getMonth() + 1) + '-'
+    		+ TimeTool.prettyfyTime(dttm.getDate()) + '-'
+    		+ TimeTool.prettyfyTime(dttm.getFullYear()) + ' '
+    		+ TimeTool.prettyfyTime(dttm.getHours()) + ':'
+    		+ TimeTool.prettyfyTime(dttm.getMinutes()) + ':'
+    		+ TimeTool.prettyfyTime(dttm.getSeconds());
+    	
+        timer = $timeout(onTimeout, 1000);
+    };
+    
+    var timer = $timeout(onTimeout, 1000);
+    
+    $scope.$on("$destroy", function() {
+        if (timer) {
+            $timeout.cancel(timer);
+        }
+    });
+    
+});
 
-    $interval(function(){ $scope.callAtInterval(); }, 1000);
+minyoServices.factory('TimeTool', function() {
+	return {
+		prettyfyTime: function(d) {
+			return parseInt(d) < 10 ? '0' + d : d;
+		}
+	};
 });

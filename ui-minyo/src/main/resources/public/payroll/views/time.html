@@ -1,1 +1,38 @@
-<div ng-controller="TimeCtrl"></div>
+<div class="container-fluid" ng-controller="TimeCtrl">
+<div class="row">
+	<p class="text-center p-cust">{{currDateTime}}</p>
+	<div class="centre">	
+		<div class="form-inline form-group">
+			<input type="text" class="form-control text-center btn-cust" placeholder="Employee Number" ng-model="empNo">
+			<button class="btn btn-success btn-cust" type="submit" ng-click="punch()">
+				<span class="glyphicon glyphicon-time"></span>
+			</button>
+		</div>	
+	</div>
+</div>
+<div class="row div-info-cust" ng-hide="info">
+	<p class="text-center">{{message}}</p>
+</div>
+</div>
+<style>
+.p-cust {
+	font-size: 70px;
+	font-family: Courier;
+	color: white;
+	margin-top: 100px;
+}
+.btn-cust {
+  	height: 50px;
+  	font-size: 30px;
+}
+.centre {
+	width: 500px;
+  	display: block;
+ 	margin-left: auto;
+  	margin-right: auto;
+}
+.div-info-cust {
+	margin-top: 60px;
+}
+</style>
+
