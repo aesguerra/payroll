@@ -30,7 +30,7 @@ public class Employee {
 	@Column(name = "employee_id")
 	private long id;
 
-	@OneToOne(optional=false,fetch=FetchType.EAGER)
+	@OneToOne(optional=false,fetch=FetchType.LAZY)
 	@JoinColumn(name="person_id")
 	private Person person;
 	
@@ -59,7 +59,7 @@ public class Employee {
 	private Date dateHired;
 	
 	
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employment_status_id",nullable=true)
 	private EmploymentStatus employmentStatus;
 	
@@ -75,9 +75,12 @@ public class Employee {
 	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL)
 	private Set<EmployeeDependent> dependents;
 	
-	@OneToOne(fetch=FetchType.EAGER)
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_type_id",nullable=true)
 	private EmployeeType employeeType;
+	
+	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL)
+	private Set<TimeLog> timeLogs;
 	
 	/**
 	 * @return the id
