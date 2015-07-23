@@ -1,7 +1,6 @@
 package org.minyo.payroll.controllers;
 
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import org.minyo.payroll.entities.Attendance;
