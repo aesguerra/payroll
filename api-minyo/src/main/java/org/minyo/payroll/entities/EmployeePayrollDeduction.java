@@ -14,19 +14,23 @@ public class EmployeePayrollDeduction {
 	@Column(name="employee_payroll_deduction_id")
 	private long id;
 
-	@Column(name="amount")
-	private Double amount;
+	@ManyToOne(targetEntity=Employee.class, fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="employee_id")
+	private Employee employee;
 	
-	@ManyToOne(targetEntity=EmployeePayroll.class)
-	@JoinColumn(name="employee_payroll_id")
-	private EmployeePayroll employeePayroll;
+	@ManyToOne(targetEntity=Payroll.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="payroll_id")
+	private Payroll payroll;
 
 	
-	@OneToOne(targetEntity=Deduction.class)
+	@OneToOne(targetEntity=Deduction.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="deduction_id")
 	private Deduction deduction;
 
+	@Column(name="amount")
+	private float amount;
 
+	
 	/**
 	 * @return the id
 	 */
@@ -46,7 +50,7 @@ public class EmployeePayrollDeduction {
 	/**
 	 * @return the amount
 	 */
-	public Double getAmount() {
+	public float getAmount() {
 		return amount;
 	}
 
@@ -54,25 +58,12 @@ public class EmployeePayrollDeduction {
 	/**
 	 * @param amount the amount to set
 	 */
-	public void setAmount(Double amount) {
+	public void setAmount(float amount) {
 		this.amount = amount;
 	}
 
 
-	/**
-	 * @return the employeePayroll
-	 */
-	public EmployeePayroll getEmployeePayroll() {
-		return employeePayroll;
-	}
 
-
-	/**
-	 * @param employeePayroll the employeePayroll to set
-	 */
-	public void setEmployeePayroll(EmployeePayroll employeePayroll) {
-		this.employeePayroll = employeePayroll;
-	}
 
 
 	/**
@@ -88,5 +79,37 @@ public class EmployeePayrollDeduction {
 	 */
 	public void setDeduction(Deduction deduction) {
 		this.deduction = deduction;
+	}
+
+
+	/**
+	 * @return the payroll
+	 */
+	public Payroll getPayroll() {
+		return payroll;
+	}
+
+
+	/**
+	 * @param payroll the payroll to set
+	 */
+	public void setPayroll(Payroll payroll) {
+		payroll = payroll;
+	}
+
+
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
+	}
+
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 }

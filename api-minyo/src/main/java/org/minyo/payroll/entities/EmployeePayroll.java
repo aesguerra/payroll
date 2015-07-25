@@ -25,10 +25,10 @@ public class EmployeePayroll {
 	private Employee employee;
 	
 	
-	@OneToMany(mappedBy="employeePayroll", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="payroll", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<EmployeePayrollDeduction> deductions;
 
-	@OneToMany(mappedBy="employeePayroll", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="payroll", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<EmployeePayrollCompensation> compensations;
 
 	
@@ -65,6 +65,15 @@ public class EmployeePayroll {
 	@Column(name="under_time_ms;")
 	private long underTime;
 	
+	
+	@Column(name="gross_income")
+	private float grossIncome;
+	
+	@Column(name="net_income")
+	private float netIncome;
+	
+	@Column(name="total_deductions")
+	private float totalDeductions;
 	
 	/**
 	 * @return the id
@@ -323,6 +332,54 @@ public class EmployeePayroll {
 	 */
 	public void setUnderTime(long underTime) {
 		this.underTime = underTime;
+	}
+
+
+	/**
+	 * @return the grossIncome
+	 */
+	public float getGrossIncome() {
+		return grossIncome;
+	}
+
+
+	/**
+	 * @param grossIncome the grossIncome to set
+	 */
+	public void setGrossIncome(float grossIncome) {
+		this.grossIncome = grossIncome;
+	}
+
+
+	/**
+	 * @return the netIncome
+	 */
+	public float getNetIncome() {
+		return netIncome;
+	}
+
+
+	/**
+	 * @param netIncome the netIncome to set
+	 */
+	public void setNetIncome(float netIncome) {
+		this.netIncome = netIncome;
+	}
+
+
+	/**
+	 * @return the totalDeductions
+	 */
+	public float getTotalDeductions() {
+		return totalDeductions;
+	}
+
+
+	/**
+	 * @param totalDeductions the totalDeductions to set
+	 */
+	public void setTotalDeductions(float totalDeductions) {
+		this.totalDeductions = totalDeductions;
 	}
 	
 	

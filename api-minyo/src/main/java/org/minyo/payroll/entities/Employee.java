@@ -79,7 +79,7 @@ public class Employee {
 	@JoinColumn(name="employee_type_id",nullable=true)
 	private EmployeeType employeeType;
 	
-	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<TimeLog> timeLogs;
 	
 	/**

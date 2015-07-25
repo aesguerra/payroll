@@ -14,10 +14,14 @@ public class EmployeePayrollCompensation {
 	@Column(name="employee_payroll_compensation_id")
 	private long id;
 	
+	@ManyToOne(targetEntity=Employee.class, fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="employee_id")
+	private Employee employee;
 	
-	@ManyToOne(targetEntity=EmployeePayroll.class)
-	@JoinColumn(name="employee_payroll_id")
-	private EmployeePayroll employeePayroll;
+	
+	@ManyToOne(targetEntity=Payroll.class, fetch=FetchType.LAZY)
+	@JoinColumn(name="payroll_id")
+	private Payroll payroll;
 	
 
 	@OneToOne(targetEntity=Compensation.class)
@@ -25,6 +29,9 @@ public class EmployeePayrollCompensation {
 	private Compensation compensation;
 
 
+	@Column(name="amount")
+	private float amount;
+	
 	/**
 	 * @return the id
 	 */
@@ -42,22 +49,6 @@ public class EmployeePayrollCompensation {
 
 
 	/**
-	 * @return the employeePayroll
-	 */
-	public EmployeePayroll getEmployeePayroll() {
-		return employeePayroll;
-	}
-
-
-	/**
-	 * @param employeePayroll the employeePayroll to set
-	 */
-	public void setEmployeePayroll(EmployeePayroll employeePayroll) {
-		this.employeePayroll = employeePayroll;
-	}
-
-
-	/**
 	 * @return the compensation
 	 */
 	public Compensation getCompensation() {
@@ -70,6 +61,54 @@ public class EmployeePayrollCompensation {
 	 */
 	public void setCompensation(Compensation compensation) {
 		this.compensation = compensation;
+	}
+
+
+	/**
+	 * @return the payroll
+	 */
+	public Payroll getPayroll() {
+		return payroll;
+	}
+
+
+	/**
+	 * @param payroll the payroll to set
+	 */
+	public void setPayroll(Payroll payroll) {
+		this.payroll = payroll;
+	}
+
+
+	/**
+	 * @return the amount
+	 */
+	public float getAmount() {
+		return amount;
+	}
+
+
+	/**
+	 * @param amount the amount to set
+	 */
+	public void setAmount(float amount) {
+		this.amount = amount;
+	}
+
+
+	/**
+	 * @return the employee
+	 */
+	public Employee getEmployee() {
+		return employee;
+	}
+
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	
 }
