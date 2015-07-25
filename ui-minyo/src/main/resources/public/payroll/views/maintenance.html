@@ -1,73 +1,256 @@
+<div class="container-fluid">
+<div class="row">
+	<label class="checkbox">
+    	<input type="checkbox" ng-model="oneAtATime">
+    	Open only one at a time
+  	</label>
+	<accordion close-others="oneAtATime">
+		<accordion-group is-open="admin.open">
+		    <accordion-heading>
+		    	Admin 
+		    	<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': admin.open,
+		    		 'glyphicon-chevron-right': !admin.open}"></i>
+		    <table class="table table-hover">
+		    </table>
+		</accordion-group>
+		<accordion-group is-open="cmpenAGOpen">
+		    <accordion-heading>
+		    	Compensation 
+		    	<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': cmpenAGOpen,
+		    		 'glyphicon-chevron-right': !cmpenAGOpen}"></i>
+		    </accordion-heading>
+		    <div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary" ng-click="open(2)">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+				<button type="button" class="btn btn-primary">
+					<span class="glyphicon glyphicon-refresh" ng-click="reload(2)"></span>
+				</button>
+			</div>
+			<div class="div-cust" collapse="isCmpenClpsed">
+				<div class="well well-lg">
+				<form class="form-inline">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" ng-model="cmpen.name">
+					</div>
+					<div class="form-group">
+						<label>Description</label>
+						<input type="text" class="form-control" ng-model="cmpen.description">
+					</div>
+					<button type="submit" class="btn btn-primary" ng-click="actionMtnce(cmpen, 2, $index)">{{cmpenAction}}</button>
+					<button type="submit" class="btn btn-primary" ng-click="close(2)">Close</button>
+				</form>
+				</div> 
+			</div>
+		    <table class="table table-hover">
+		    	<thead>
+		    		<tr>
+		    			<th>Action</th>
+		    			<th>Name</th>
+		    			<th>Description</th>
+					</tr>
+		    	</thead>
+		    	<tbody>
+		    		<tr ng-repeat="c in compensations">
+		    			<td>
+		    				<a class="glyphicon glyphicon-edit a-cust" ng-click="editRow(c, 2) "></a>
+		    				<a class="glyphicon glyphicon-remove" ng-click="deleteRow(c, 2)"></a>
+		    			</td>
+		    			<td ng-show="compenID">{{c.link}}</td>
+		    			<td>{{c.name}}</td>
+		    			<td>{{c.description}}</td>
+		    		</tr>
+		    	</tbody>
+		    </table>
+		</accordion-group>
+		<accordion-group is-open="deducAGOpen">
+		    <accordion-heading>
+		    	Deduction 
+		    	<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': deducAGOpen,
+		    		 'glyphicon-chevron-right': !deducAGOpen}"></i>
+		    </accordion-heading>
+		    <div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary" ng-click="open(3)">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+				<button type="button" class="btn btn-primary">
+					<span class="glyphicon glyphicon-refresh" ng-click="reload(3)"></span>
+				</button>
+			</div>
+			<div class="div-cust" collapse="isDeducClpsed">
+				<div class="well well-lg">
+				<form class="form-inline">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" ng-model="deduc.name">
+					</div>
+					<div class="form-group">
+						<label>Provider</label>
+						<input type="text" class="form-control" ng-model="deduc.provider">
+					</div>
+    				<input type="checkbox" ng-model="deduc.voluntary"> Voluntary 
+					<button type="submit" class="btn btn-primary" ng-click="actionMtnce(deduc, 3)">{{deducAction}}</button>
+					<button type="submit" class="btn btn-primary" ng-click="close(3)">Close</button>
+				</form>
+				</div> 
+			</div>
+		    <table class="table table-hover">
+		    	<thead>
+		    		<tr>
+		    			<th>Action</th>
+		    			<th>Name</th>
+		    			<th>Provider</th>
+		    			<th>Voluntary</th>
+					</tr>
+		    	</thead>
+		    	<tbody>
+		    		<tr ng-repeat="c in deductions">
+		    			<td>
+		    				<a class="glyphicon glyphicon-edit a-cust" ng-click="editRow(c, 3) "></a>
+		    				<a class="glyphicon glyphicon-remove" ng-click="deleteRow(c, 3)"></a>
+		    			</td>
+		    			<td ng-show="deducID">{{c.link}}</td>
+		    			<td>{{c.name}}</td>
+		    			<td>{{c.provider}}</td>
+		    			<td>{{c.voluntary}}</td>
+		    		</tr>
+		    	</tbody>
+		    </table>
+		</accordion-group>
+		<accordion-group is-open="emtypAGOpen">
+		    <accordion-heading>
+		    	Employee Types 
+		    	<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': emtypAGOpen,
+		    		 'glyphicon-chevron-right': !emtypAGOpen}"></i>
+		    </accordion-heading>
+		    <div class="btn-group" role="group">
+				<button type="button" class="btn btn-primary" ng-click="open(4)">
+					<span class="glyphicon glyphicon-plus"></span>
+				</button>
+				<button type="button" class="btn btn-primary">
+					<span class="glyphicon glyphicon-refresh" ng-click="reload(4)"></span>
+				</button>
+			</div>
+			<div class="div-cust" collapse="isEmtypClpsed">
+				<div class="well well-lg">
+				<form class="form-inline">
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" ng-model="emtyp.name">
+					</div>
+					<div class="form-group">
+						<label>Description</label>
+						<input type="text" class="form-control" ng-model="emtyp.description">
+					</div>
+					<button type="submit" class="btn btn-primary" ng-click="actionMtnce(emtyp, 4)">{{emtypAction}}</button>
+					<button type="submit" class="btn btn-primary" ng-click="close(4)">Close</button>
+				</form>
+				</div> 
+			</div>
+		    <table class="table table-hover">
+		    	<thead>
+		    		<tr>
+		    			<th>Action</th>
+		    			<th>Name</th>
+		    			<th>Description</th>
+					</tr>
+		    	</thead>
+		    	<tbody>
+		    		<tr ng-repeat="c in empTypes">
+		    			<td>
+		    				<a class="glyphicon glyphicon-edit a-cust" ng-click="editRow(c, 4) "></a>
+		    				<a class="glyphicon glyphicon-remove" ng-click="deleteRow(c, 4)"></a>
+		    			</td>
+		    			<td ng-show="emtypID">{{c.link}}</td>
+		    			<td>{{c.name}}</td>
+		    			<td>{{c.description}}</td>
+		    		</tr>
+		    	</tbody>
+		    </table>
+		</accordion-group>
+	</accordion>
+</div>
+</div>
 <style>
-.a-thumbnail {
-	width: 100%;
-	height: 180px;
-	margin: 5px;
-	border-color: #424242;
-	border-radius: 1px;
-	-webkit-box-shadow: inset 4px 14px 68px 6px rgba(0,0,0,0.22);
-	-moz-box-shadow: inset 4px 14px 68px 6px rgba(0,0,0,0.22);
-	box-shadow: inset 4px 14px 68px 6px rgba(0,0,0,0.22);
-}
-.a-thumbnail span {
-	font-size: 36px;
- 	display: block; 
-}
-.a-thumbnail .span-glyphicon {
- 	padding-top: 50px;
-}
-.a-thumbnail .span-label {
-	padding-top: 10px;
-	font-size: 20px;
-	font-weight: normal;
+.a-cust {
+	margin-right: 7px;
+} 
+.div-cust {
+	margin-top: 20px;	
 }
 </style>
-<div class="container-fluid">
-    <div class="row">
-		<div class="col-xs-12 col-sm-4">
-			<a href="#/mtnce-cmpen" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-ruble span-glyphicon"></span><span class="span-label">Compensations</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-4">
-		    <a href="#/mtnce-deduc" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-minus span-glyphicon"></span><span class="span-label">Deductions</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-4">
-			<a href="#/mtnce-emtyp" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Employee Types</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-6">
-			<a href="#/mtnce-emstt" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Employment Status</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-2">
-			<a href="#/mtnce-orgnz" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-equalizer span-glyphicon"></span><span class="span-label">Organizations</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-2">
-			<a href="#/mtnce-admin" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Admin</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-2">
-			<a class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-calendar span-glyphicon"></span><span class="span-label">Menu10</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-4">
-			<a class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Menu5</span>
-		    </a>
-		</div>
-		<div class="col-xs-12 col-sm-8">
-			<a href="maintenance" class="btn btn-lg btn-primary a-thumbnail" role="button">
-		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Maintenance</span>
-		    </a>
-		</div>
-    </div>
-</div>
+
+<!-- <style> 
+/* .a-thumbnail { */
+/* 	width: 100%; */
+/* 	height: 180px; */
+/* 	margin: 5px; */
+/* 	border-color: #424242; */
+/* 	border-radius: 1px; */
+/* 	-webkit-box-shadow: inset 4px 14px 68px 6px rgba(0,0,0,0.22); */
+/* 	-moz-box-shadow: inset 4px 14px 68px 6px rgba(0,0,0,0.22); */
+/* 	box-shadow: inset 4px 14px 68px 6px rgba(0,0,0,0.22); */
+/* } */
+/* .a-thumbnail span { */
+/* 	font-size: 36px; */
+/*  	display: block;  */
+/* } */
+/* .a-thumbnail .span-glyphicon { */
+/*  	padding-top: 50px; */
+/* } */
+/* .a-thumbnail .span-label { */
+/* 	padding-top: 10px; */
+/* 	font-size: 20px; */
+/* 	font-weight: normal; */
+/* } */
+<!-- </style> -->
+<!-- <div class="container-fluid"> -->
+<!--     <div class="row"> -->
+<!-- 		<div class="col-xs-12 col-sm-4"> -->
+<!-- 			<a href="#/mtnce-cmpen" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-ruble span-glyphicon"></span><span class="span-label">Compensations</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-4"> -->
+<!-- 		    <a href="#/mtnce-deduc" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-minus span-glyphicon"></span><span class="span-label">Deductions</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-4"> -->
+<!-- 			<a href="#/mtnce-emtyp" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Employee Types</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-6"> -->
+<!-- 			<a href="#/mtnce-emstt" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Employment Status</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-2"> -->
+<!-- 			<a href="#/mtnce-orgnz" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-equalizer span-glyphicon"></span><span class="span-label">Organizations</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-2"> -->
+<!-- 			<a href="#/mtnce-admin" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Admin</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-2"> -->
+<!-- 			<a class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-calendar span-glyphicon"></span><span class="span-label">Menu10</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-4"> -->
+<!-- 			<a class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Menu5</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-xs-12 col-sm-8"> -->
+<!-- 			<a href="maintenance" class="btn btn-lg btn-primary a-thumbnail" role="button"> -->
+<!-- 		    	<span class="glyphicon glyphicon-user span-glyphicon"></span><span class="span-label">Maintenance</span> -->
+<!-- 		    </a> -->
+<!-- 		</div> -->
+<!--     </div> -->
+<!-- </div> -->
