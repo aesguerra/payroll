@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="tbl_attendance")
 public class Attendance {
@@ -13,7 +15,7 @@ public class Attendance {
 	@Column(name="attendance_id")
 	private long id;
 	
-	@ManyToOne(targetEntity=Employee.class)
+	@ManyToOne(targetEntity=Employee.class, fetch=FetchType.LAZY)
 	@JoinColumn(name="employee_id")
 	private Employee employee;
 	
@@ -40,6 +42,7 @@ public class Attendance {
 	/**
 	 * @return the employee
 	 */
+	@JsonIgnore
 	public Employee getEmployee() {
 		return employee;
 	}

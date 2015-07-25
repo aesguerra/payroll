@@ -7,9 +7,11 @@ import javax.persistence.*;
 
 import org.minyo.payroll.references.PayrollStatus;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name="tbl_payroll_current")
-public class PayrollCurrent {
+@Table(name="tbl_payroll")
+public class Payroll {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.TABLE)
@@ -22,7 +24,7 @@ public class PayrollCurrent {
 	@Column(name="end_date")
 	private Date endDate;
 	
-	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="employee", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<EmployeePayroll> employees;
 
 	
@@ -76,6 +78,7 @@ public class PayrollCurrent {
 	/**
 	 * @return the employees
 	 */
+	@JsonIgnore
 	public Set<EmployeePayroll> getEmployees() {
 		return employees;
 	}

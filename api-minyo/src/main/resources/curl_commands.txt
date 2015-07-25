@@ -47,6 +47,9 @@ curl -v -X PATCH -H "Content-Type:application/json" -d '{"dependents" : {"firstN
 
 
 
+# time in/out employee
+curl -v -X POST http://localhost:51000/payroll/api/timelogs/{employee#}
+
 
 # shutdown
 curl -X POST http://localhost:59001/shutdown
