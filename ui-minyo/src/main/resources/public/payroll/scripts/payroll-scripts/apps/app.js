@@ -15,19 +15,19 @@ minyoControllers.controller('MinyoController', function($scope) {
 minyoApp.config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
-		when('/', {	templateUrl: 'views/home.html', controller: 'MinyoControllers' }).
+		when('/', {	templateUrl: 'views/home.html', controller: 'MinyoController' }).
 		when('/home', {	templateUrl: 'views/home.html', controller: 'MinyoController' }).
 		when('/person', { templateUrl: 'views/person.html', controller: 'EmpCtrl' }).
 		when('/empdet', { templateUrl: 'views/employee-detail.html', controller: 'EmpDetCtrl' }).
 		when('/attendance', { templateUrl: 'views/time.html', controller: 'TimeCtrl' }).
 		when('/paygen', { templateUrl: 'views/payroll-gen.html', controller: 'PaygenController' }).
-		when('/maintenance', { templateUrl: 'views/maintenance.html', controller: 'MaintenanceCtrl' }).
-		when('/mtnce-admin', { templateUrl: 'views/mtnce/admin.html', controller: 'MtnceAdminCtrl' }).
-		when('/mtnce-cmpen', { templateUrl: 'views/mtnce/compensation.html', controller: 'MtnceCmpenCtrl' }).
-		when('/mtnce-deduc', { templateUrl: 'views/mtnce/deduction.html', controller: 'MtnceDeducCtrl' }).
-		when('/mtnce-emtyp', { templateUrl: 'views/mtnce/employee-type.html', controller: 'MtnceEmTypCtrl' }).
-		when('/mtnce-emstt', { templateUrl: 'views/mtnce/employment-status.html', controller: 'MtnceEmSttCtrl' }).
-		when('/mtnce-orgnz', { templateUrl: 'views/mtnce/organization.html', controller: 'MtnceOrgnzCtrl' }).
+		when('/mtnce-home', { templateUrl: 'views/maintenance.html', controller: 'MtnceCtrl' }).
+//		when('/mtnce-admin', { templateUrl: 'views/mtnce/admin.html', controller: 'MtnceAdminCtrl' }).
+//		when('/mtnce-cmpen', { templateUrl: 'views/mtnce/compensation.html', controller: 'MtnceCmpenCtrl' }).
+//		when('/mtnce-deduc', { templateUrl: 'views/mtnce/deduction.html', controller: 'MtnceDeducCtrl' }).
+//		when('/mtnce-emtyp', { templateUrl: 'views/mtnce/employee-type.html', controller: 'MtnceEmTypCtrl' }).
+//		when('/mtnce-emstt', { templateUrl: 'views/mtnce/employment-status.html', controller: 'MtnceEmSttCtrl' }).
+//		when('/mtnce-orgnz', { templateUrl: 'views/mtnce/organization.html', controller: 'MtnceOrgnzCtrl' }).
 		otherwise({ redirectTo: '/' });
 	}
 ]);

@@ -1,50 +1,50 @@
-<div class="panel panel-default">
-	<div class="panel-body">
-		<div class="container-fluid" ng-controller="EmpCtrl">
-			<div class="row">
-				<div
-					class="columns columns-right btn-group pull-right custom-toolbar">
-					<button type="button" class="btn btn-primary"
-						aria-label="Left Align" ng-click="open('Hire')">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-					</button>
-					<button type="button" class="btn btn-primary"
-						aria-label="Left Align">
-						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-					</button>
-				</div>
-				<table class="table table-responsive table-hover">
-					<thead>
-						<tr class="table-label">
-							<td>Action</td>
-							<td>ID</td>
-							<td>Name</td>
-							<td>Description</td>
-						</tr>
-					</thead>
-					<tbody>
-						<tr ng-repeat="d in data">
-							<td>
-								<a role="button" ng-click="edit(d)"><span class="glyphicon glyphicon-edit"></span></a>
-								<a role="button" ng-click="removeRow($index, d)"><span class="glyphicon glyphicon-remove"></span></a>
-							</td>
-							<td>{{d.compensation_id}}</td>
-							<td>{{d.compensation_name}}</td>
-							<td>{{d.compensation_desription}}</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-</div>
-<style>
-.custom-toolbar {
-	padding-top: 10px;
-	padding-left: 10px;
-}
+<!-- <div class="panel panel-default"> -->
+<!-- 	<div class="panel-body"> -->
+<!-- 		<div class="container-fluid" ng-controller="EmpCtrl"> -->
+<!-- 			<div class="row"> -->
+<!-- 				<div -->
+<!-- 					class="columns columns-right btn-group pull-right custom-toolbar"> -->
+<!-- 					<button type="button" class="btn btn-primary" -->
+<!-- 						aria-label="Left Align" ng-click="open('Hire')"> -->
+<!-- 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> -->
+<!-- 					</button> -->
+<!-- 					<button type="button" class="btn btn-primary" -->
+<!-- 						aria-label="Left Align"> -->
+<!-- 						<span class="glyphicon glyphicon-cog" aria-hidden="true"></span> -->
+<!-- 					</button> -->
+<!-- 				</div> -->
+<!-- 				<table class="table table-responsive table-hover"> -->
+<!-- 					<thead> -->
+<!-- 						<tr class="table-label"> -->
+<!-- 							<td>Action</td> -->
+<!-- 							<td>ID</td> -->
+<!-- 							<td>Name</td> -->
+<!-- 							<td>Description</td> -->
+<!-- 						</tr> -->
+<!-- 					</thead> -->
+<!-- 					<tbody> -->
+<!-- 						<tr ng-repeat="d in data"> -->
+<!-- 							<td> -->
+<!-- 								<a role="button" ng-click="edit(d)"><span class="glyphicon glyphicon-edit"></span></a> -->
+<!-- 								<a role="button" ng-click="removeRow($index, d)"><span class="glyphicon glyphicon-remove"></span></a> -->
+<!-- 							</td> -->
+<!-- 							<td>{{d.compensation_id}}</td> -->
+<!-- 							<td>{{d.compensation_name}}</td> -->
+<!-- 							<td>{{d.compensation_desription}}</td> -->
+<!-- 						</tr> -->
+<!-- 					</tbody> -->
+<!-- 				</table> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <style> -->
+/* .custom-toolbar { */
+/* 	padding-top: 10px; */
+/* 	padding-left: 10px; */
+/* } */
 
-.table-label td {
-	font-weight: bold;
-}
-</style>
+/* .table-label td { */
+/* 	font-weight: bold; */
+/* } */
+<!-- </style> -->
