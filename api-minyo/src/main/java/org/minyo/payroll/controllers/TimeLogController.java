@@ -40,7 +40,7 @@ public class TimeLogController {
 		TimeLog ret = null;
 		boolean isTimeIn = false;
 
-		Employee employee = employeeRepository.findByEmployeeNumber(employeeNumber);
+		Employee employee = employeeRepository.findByEmployeeNumberIgnoreCase(employeeNumber);
 		TimeLog timeLog = timeLogRepository.findByEmployeeId(employee.getId());
 
 		if(timeLog == null) {
