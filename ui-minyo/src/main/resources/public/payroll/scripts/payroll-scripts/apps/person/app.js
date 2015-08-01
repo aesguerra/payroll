@@ -6,11 +6,26 @@
 minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, EmpService) {
 	$scope.data = {};
 	
-	EmpService.query(function(data) {
-		$scope.data = data._embedded.persons;
-	}, function() {
-		console.log('Error.');
-	});
+	EmpService.EmpGetStar(function(data, status, headers, config) {
+		var empData = data._embedded['employees'];
+		$scope.data = [];		
+		for(d in empData) {
+			var empLink = empData[d]._links.person.href;
+			EmpService.Get(empLink, function(data2, status, headers, config) {
+				var temp = {
+					perLink: data2._links.self.href,
+					empLink: empLink,
+					empNo: empData[d].employeeNumber,
+					lastName: data2.lastName,
+					firstName: data2.firstName,
+					middleName: data2.middleName,
+					affix: data2.affix,
+					gender: data2.gender
+				}
+				$scope.data.push(temp);
+			}, errorResponse);
+		}
+	}, errorResponse);
 	
 	$scope.open = function(b) {
 		$location.path('/empdet');
@@ -40,7 +55,13 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 	$scope.action = EmpCache.getAction();
 	
 	if($scope.action == 'Update') {
-		$scope.emp = EmpCache.getData();
+		var links = EmpCache.getData();
+		EmpService.Get(links.per, function(data, status, headers, config) {
+			EmpService.Get(links.per + '/employee', function(data2, status, headers, config) {
+				$scope.per = data;
+				$scope.emp = data2;
+			}, errorResponse);
+		}, errorResponse);
 	}
 	
 	$scope.cancel = function() {
@@ -52,33 +73,56 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 		}
 	};
 	
-	$scope.doAction = function(emp) {
-		console.log('Do action for ' + JSON.stringify(emp) + ', action: ' + $scope.action);
-		var empFullName = emp.lastName + ' ' + emp.firstName + ' ' + emp.middleName;
+	$scope.doAction = function(d, e) {
+		console.log('Do action for ' + JSON.stringify(d) + ', action: ' + $scope.action);
+		var perFullName = d.lastName + ' ' + d.firstName + ' ' + d.middleName;
 		if($scope.action == 'Hire') {
-			EmpService.add(emp, function() {
-				alert('Successfully added ' + empFullName + '.');
-				console.log('Added employee ' + empFullName);
-				$location.path('/person');
-			}, function() {
-				alert('Oops! Something smelly happened back there. Adding of employee failed.');
-			});
+			EmpService.AddPerson(d, function(data, status, headers, config) {
+				var empData = {
+					employeeNumber: e.employeeNumber,
+					pagibig: e.pagibig,
+					philhealth: e.philhealth,
+					taxExemptionStatus: e.taxExemptionStatus,
+					dateHired: e.dateHired,
+					sss: e.socialSecurityNumber,
+					tin: e.taxIdentificationNumber,
+					person: headers('Location')
+				};
+				EmpService.Hire(empData, function(data2, status, headers, config) {
+					alertAndLog('Successfully added ' + perFullName);
+					$location.path('/person');
+				}, errorResponse);
+			}, errorResponse);
 		}
 		if($scope.action == 'Update') {
-			console.log('Updating employee ' + empFullName);
-			var href = $scope.emp._links.self.href;
-			EmpService.update({id: href.substring(href.lastIndexOf('/') + 1)}, emp, function() {
-				alert('Successfully updated ' + empFullName + '.');
-				console.log('Updated employee ' + empFullName);
-				$location.path('/person');
-			});
+			console.log('Updating employee ' + perFullName);
+//			var temp = {
+//				employeeNumber: $scope.emp.employeeNumber,
+//				pagibig: $scope.emp.pagibig,
+//				philhealth: $scope.emp.philhealth,
+//				taxExceptionStatus: $scope.emp.taxExceptionStatus,
+//				dateHired: $scope.emp.dateHired,
+//				sss: $scope.emp.sss,
+//				tin: $scope.emp.tin,
+//				link: $scope.emp._links.self.href
+//			};
+			EmpService.Update(d, function(data, status, headers, config) {
+				EmpService.Update(e, function(data, status, headers, config) {
+					alertAndLog('Successfully updated ' + perFullName + '.');
+					$location.path('/person');
+				}, errorResponse);
+			}, errorResponse);
 		}
 	};
 });
 
+function debugme(c, d) {
+	console.log(c + ": " + JSON.stringify(d));
+}
+
 minyoControllers.service('EmpCache', function() {
 	var action = '';
-	var data = '';
+	var data = {};
 	
 	var setAction = function(a) {
 		action = a;
@@ -89,8 +133,8 @@ minyoControllers.service('EmpCache', function() {
 	};
 
 	var setData = function(d) {
-		data = d;
-	}
+		data = { per: d.perLink, emp : d.empLink };
+	};
 	
 	var getData = function() {
 		return data;
@@ -106,14 +150,78 @@ minyoControllers.service('EmpCache', function() {
 
 
 // Services
-minyoServices.factory('EmpService', function($resource){
-	return  $resource('http://localhost:51000/payroll/api/persons/:id', { id: '@id'}, 
-			{ 
-		query: { uri:'http://localhost:51000/payroll/api/persons', 'method' : 'GET', isArray: false },
-		get: { method : 'GET', isArray: false },
-		add : { method : 'POST' },
-		update: { method : 'PUT' },
-		remove: { method: 'DELETE'}
-	});
+minyoServices.factory('EmpService', function($http){
+	var URI = 'http://localhost:51000/payroll/api/';
+	var persons = URI + 'persons/';
+	var employees = URI + 'employees/';
+	
+	return { 
+		AddPerson: function(d, s, e) {
+			var req = {
+				 method: 'POST',
+				 url: persons,
+				 data: d
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		Hire: function(d, s, e) {
+			var req = {
+				 method: 'POST',
+				 url: employees,
+				 data: d
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		PerGetStar: function(s, e) {
+			var req = {
+				 method: 'GET',
+				 url: persons
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		EmpGetStar: function(s, e) {
+			var req = {
+				 method: 'GET',
+				 url: employees
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		Get: function(d, s, e) {
+			var req = {
+				 method: 'GET',
+				 url: d
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		Update: function(d, s, e) {
+			var req = {
+				 method: 'PATCH',
+				 url: d._links.self.href,
+				 data: d
+			};
+			$http(req).success(s).error(e);
+		},
+		Delete: function(d, s, e) {
+			var req = {
+				 method: 'DELETE',
+				 url: d.link,
+				 data: d
+			};
+			$http(req).success(s).error(e);
+		}
+	};
 });
 
+var errorResponse = function(d) {
+	alertAndLog('Oops. Something smelly happened back there. Please try again.');
+}
+
+function alertAndLog(d) {
+	alert(d);
+	console.log(d);
+}

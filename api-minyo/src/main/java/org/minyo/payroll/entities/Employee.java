@@ -30,7 +30,7 @@ public class Employee {
 	@Column(name = "employee_id")
 	private long id;
 
-	@OneToOne(optional=false,fetch=FetchType.LAZY)
+	@OneToOne(optional=false,fetch=FetchType.EAGER)
 	@JoinColumn(name="person_id")
 	private Person person;
 	
