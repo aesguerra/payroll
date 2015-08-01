@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="tbl_persons")
 public class Person {
@@ -98,6 +100,10 @@ public class Person {
 	@Column(name = "spouse_occupation")
 	private String spouseOccupation;
 	
+	
+	@OneToOne(mappedBy="person", targetEntity=Employee.class)
+	@JoinColumn(name="employee_id")
+	private Employee employee;
 	
 	
 	public Person() {
@@ -535,6 +541,21 @@ public class Person {
 	 */
 	public void setSpouseOccupation(String spouseOccupation) {
 		this.spouseOccupation = spouseOccupation;
+	}
+
+	/**
+	 * @return the employee
+	 */
+	@JsonIgnore
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	/**
+	 * @param employee the employee to set
+	 */
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 }

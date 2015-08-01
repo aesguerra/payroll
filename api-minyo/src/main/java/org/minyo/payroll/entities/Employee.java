@@ -46,11 +46,11 @@ public class Employee {
 	private String philhealth;
 	
 	@Column(name="social_security_number",nullable=true)
-	private String SSS;
+	private String socialSecurityNumber;
 	
 	
 	@Column(name="tax_identification_number",nullable=true)
-	private String TIN;
+	private String taxIdentificationNumber;
 	
 	@Column(name="tax_exemption_status",nullable=true)
 	private String taxExemptionStatus;
@@ -152,33 +152,6 @@ public class Employee {
 		this.philhealth = philhealth;
 	}
 
-	/**
-	 * @return the sSS
-	 */
-	public String getSSS() {
-		return SSS;
-	}
-
-	/**
-	 * @param sSS the sSS to set
-	 */
-	public void setSSS(String sSS) {
-		SSS = sSS;
-	}
-
-	/**
-	 * @return the tIN
-	 */
-	public String getTIN() {
-		return TIN;
-	}
-
-	/**
-	 * @param tIN the tIN to set
-	 */
-	public void setTIN(String tIN) {
-		TIN = tIN;
-	}
 
 	/**
 	 * @return the taxExemptionStatus
@@ -276,6 +249,48 @@ public class Employee {
 	 */
 	public void setEmployeeType(EmployeeType employeeType) {
 		this.employeeType = employeeType;
+	}
+
+	/**
+	 * @return the socialSecurityNumber
+	 */
+	public String getSocialSecurityNumber() {
+		return socialSecurityNumber;
+	}
+
+	/**
+	 * @param socialSecurityNumber the socialSecurityNumber to set
+	 */
+	public void setSocialSecurityNumber(String socialSecurityNumber) {
+		this.socialSecurityNumber = socialSecurityNumber;
+	}
+
+	/**
+	 * @return the taxIdentificationNumber
+	 */
+	public String getTaxIdentificationNumber() {
+		return taxIdentificationNumber;
+	}
+
+	/**
+	 * @param taxIdentificationNumber the taxIdentificationNumber to set
+	 */
+	public void setTaxIdentificationNumber(String taxIdentificationNumber) {
+		this.taxIdentificationNumber = taxIdentificationNumber;
+	}
+
+	/**
+	 * @return the timeLogs
+	 */
+	public Set<TimeLog> getTimeLogs() {
+		return timeLogs;
+	}
+
+	/**
+	 * @param timeLogs the timeLogs to set
+	 */
+	public void setTimeLogs(Set<TimeLog> timeLogs) {
+		this.timeLogs = timeLogs;
 	}
 	
 	
