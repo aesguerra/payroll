@@ -74,7 +74,7 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 	};
 	
 	$scope.doAction = function(d, e) {
-		console.log('Do action for ' + JSON.stringify(d) + ', action: ' + $scope.action);
+		console.log('Action set to ' + JSON.stringify(d) + ', action: ' + $scope.action);
 		var perFullName = d.lastName + ' ' + d.firstName + ' ' + d.middleName;
 		if($scope.action == 'Hire') {
 			EmpService.AddPerson(d, function(data, status, headers, config) {
@@ -96,16 +96,6 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 		}
 		if($scope.action == 'Update') {
 			console.log('Updating employee ' + perFullName);
-//			var temp = {
-//				employeeNumber: $scope.emp.employeeNumber,
-//				pagibig: $scope.emp.pagibig,
-//				philhealth: $scope.emp.philhealth,
-//				taxExceptionStatus: $scope.emp.taxExceptionStatus,
-//				dateHired: $scope.emp.dateHired,
-//				sss: $scope.emp.sss,
-//				tin: $scope.emp.tin,
-//				link: $scope.emp._links.self.href
-//			};
 			EmpService.Update(d, function(data, status, headers, config) {
 				EmpService.Update(e, function(data, status, headers, config) {
 					alertAndLog('Successfully updated ' + perFullName + '.');

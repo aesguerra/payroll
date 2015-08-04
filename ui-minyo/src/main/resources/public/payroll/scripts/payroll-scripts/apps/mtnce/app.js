@@ -16,6 +16,8 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 	$scope.cmpen = {};
 	$scope.deduc = {};
 	$scope.emtyp = {};
+	$scope.emstt = {};
+	$scope.orgnz = {};
 	
 	// 1 - Admin
 	// 2 - Compensation
@@ -50,8 +52,27 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 		case 4: 
 			MtnceService.EmtypAdd(d, 
 					function(data, status, headers, config) {
-				alertAndLog('Successfully added deduction ' + d.name);
+				alertAndLog('Successfully added employee status ' + d.name);
 				$scope.empTypes.push({link: headers('Location'), name: d.name, description: d.description });
+				d.name = '';
+				d.description = '';
+			}, errorResponse);
+			break;
+		case 5:
+			MtnceService.EmsttAdd(d, 
+					function(data, status, headers, config) {
+				alertAndLog('Successfully added employment type ' + d.name);
+				$scope.empStatuses.push({link: headers('Location'), name: d.name, description: d.description });
+				d.name = '';
+				d.description = '';
+			}, errorResponse);
+			break;
+		case 6:
+			MtnceService.OrgnzAdd(d, 
+					function(data, status, headers, config) {
+				alertAndLog('Successfully added organization ' + d.name);
+				$scope.empStatuses.push({link: headers('Location'), name: d.name, description: d.description,
+					organization: d.organization, manager: d.manager });
 				d.name = '';
 				d.description = '';
 			}, errorResponse);
@@ -80,6 +101,18 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 			$scope.emtypAction = 'Add';
 			$scope.emtyp.name = '';
 			$scope.emtyp.description = '';
+			break;
+		case 5:
+			$scope.isEmsttClpsed = false;
+			$scope.emsttAction = 'Add';
+			$scope.emstt.name = '';
+			$scope.emstt.description = '';
+			break;
+		case 6:
+			$scope.isOrgnzClpsed = false;
+			$scope.orgnzAction = 'Add';
+			$scope.orgnz.name = '';
+			$scope.orgnz.description = '';
 			break;
 		}
 	};
@@ -112,6 +145,22 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 			$scope.emtyp.name = d.name;
 			$scope.emtyp.description = d.description;
 			break;
+		case 5:
+			$scope.emsttAction = 'Update';
+			$scope.isEmsttClpsed = false;
+			
+			$scope.emstt.link = d.link;
+			$scope.emstt.name = d.name;
+			$scope.emstt.description = d.description;
+			break;
+		case 6:
+			$scope.orgnzAction = 'Update';
+			$scope.isOrgnzClpsed = false;
+			
+			$scope.orgnz.link = d.link;
+			$scope.orgnz.name = d.name;
+			$scope.orgnz.description = d.description;
+			break;
 		}
 	};
 	
@@ -139,6 +188,20 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 				$scope.reload(4);
 			}, errorResponse);
 			break;
+		case 5: 
+			MtnceService.Update(d, function(data, status, headers, config) {
+				alertAndLog('Updated.');
+				$scope.isEmsttClpsed = true;
+				$scope.reload(5);
+			}, errorResponse);
+			break;
+		case 5: 
+			MtnceService.Update(d, function(data, status, headers, config) {
+				alertAndLog('Updated.');
+				$scope.isOrgnzClpsed = true;
+				$scope.reload(6);
+			}, errorResponse);
+			break;
 		}
 	}
 	
@@ -163,6 +226,18 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 				MtnceService.Delete(d, function(data, status, headers, config) {
 					alertAndLog('Deleted.');
 					$scope.reload(4);
+				});
+				break;
+			case 5: 
+				MtnceService.Delete(d, function(data, status, headers, config) {
+					alertAndLog('Deleted.');
+					$scope.reload(5);
+				});
+				break;
+			case 6: 
+				MtnceService.Delete(d, function(data, status, headers, config) {
+					alertAndLog('Deleted.');
+					$scope.reload(6);
 				});
 				break;
 			}
@@ -192,6 +267,12 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 		case 4: 
 			$scope.setAction($scope.emtypAction, d, i);
 			break;
+		case 5: 
+			$scope.setAction($scope.emsttAction, d, i);
+			break;
+		case 6: 
+			$scope.setAction($scope.orgnzAction, d, i);
+			break;
 		}	
 	}
 	
@@ -206,6 +287,12 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 			break;
 		case 4:
 			$scope.isEmtypClpsed = true;
+			break;
+		case 5:
+			$scope.isEmsttClpsed = true;
+			break;
+		case 6:
+			$scope.isOrgnzClpsed = true;
 			break;
 		}
 	};
@@ -250,12 +337,40 @@ minyoControllers.controller('MtnceCtrl', function($scope, MtnceService) {
 				$scope.empTypes = empTypes;
 			}, errorResponse);
 			break;
+		case 5: 
+			MtnceService.EmsttGetStar(function(data, status, headers, config) {
+				var empStatuses = [];
+				data._embedded['reference employment status'].forEach(function(entry) {
+					empStatuses.push({
+						link : entry._links.self.href,
+						name : entry.name,
+						description : entry.description});
+				});
+				$scope.empStatuses = empStatuses;
+			}, errorResponse);
+			break;
+		case 6: 
+			MtnceService.OrgnzGetStar(function(data, status, headers, config) {
+				var organizations = [];
+				data._embedded['reference organizations'].forEach(function(entry) {
+					organizations.push({
+						link : entry._links.self.href,
+						name : entry.name,
+						description : entry.description,
+						parent: entry.parent,
+						manager: entry.manager });
+				});
+				$scope.organizations = organizations;
+			}, errorResponse);
+			break;
 		}
 	}
 		
 	$scope.reload(2);
 	$scope.reload(3);
 	$scope.reload(4);
+	$scope.reload(5);
+	$scope.reload(6);
 	
 });
 
@@ -272,6 +387,9 @@ minyoControllers.factory('MtnceService', function($resource, $http) {
 	var compensations = URI + 'compensations/';
 	var deductions = URI + 'deductions/';
 	var employeeTypes = URI + 'employee-types/';
+	var employmentStatus = URI + 'employment-status/';
+	var organizations = URI + 'organizations/';
+	
 	return {
 		CmpenAdd: function(d, s, e) {
 			var req = {
@@ -324,6 +442,40 @@ minyoControllers.factory('MtnceService', function($resource, $http) {
 			
 			$http(req).success(s).error(e);
 		},
+		EmsttAdd: function(d, s, e) {
+			var req = {
+				 method: 'POST',
+				 url: employmentStatus,
+				 data: d
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		EmsttGetStar: function(s, e) {
+			var req = {
+				 method: 'GET',
+				 url: employmentStatus
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		OrgnzAdd: function(d, s, e) {
+			var req = {
+				 method: 'POST',
+				 url: organizations,
+				 data: d
+			};
+			
+			$http(req).success(s).error(e);
+		},
+		OrgnzGetStar: function(s, e) {
+			var req = {
+				 method: 'GET',
+				 url: organizations
+			};
+			
+			$http(req).success(s).error(e);
+		},
 		Get: function(d, s, e) {
 			var req = {
 				 method: 'GET',
@@ -356,116 +508,3 @@ function alertAndLog(d) {
 	alert(d);
 	console.log(d);
 }
-//minyoControllers.controller('MtnceCmpenCtrl', function($scope, $location, MtnceCmpenCache, MtnceCmpenService) {
-//	$scope.data = {};
-//	
-//	MtnceCmpenService.query(function(data) {
-//		$scope.data = data._embedded.persons;
-//	}, function() {
-//		console.log('Error.');
-//	});
-//	
-//	$scope.open = function(b) {
-//		$location.path('/empdet');
-//		MtnceCmpenCache.setAction(b);
-//	}
-//	
-//	$scope.removeRow = function(i, d){			
-//		var empFullName = d.lastName + " " + d.firstName + " " + d.middleName;	
-//		var r = confirm("Delete person " + empFullName + "?");
-//		if (r == true) {
-//			var href = d._links.self.href;
-//			MtnceCmpenService.remove({id: href.substring(href.lastIndexOf('/') + 1)}, function() {
-//				alert('Person ' + empFullName + ' has been removed.');
-//				$scope.data.splice(i, 1);
-//			});
-//		}
-//	};
-//	
-//	$scope.edit = function(d) {
-//		MtnceCmpenCache.setAction('Update');
-//		MtnceCmpenCache.setData(d);
-//    	$location.path('/empdet');
-//	};
-//});
-//
-//minyoControllers.controller('MtnceCmpenCtrl', function($scope, $location, MtnceCmpenCache, MtnceCmpenService) {
-//	$scope.action = MtnceCmpenCache.getAction();
-//	
-//	if($scope.action == 'Update') {
-//		$scope.emp = MtnceCmpenCache.getData();
-//	}
-//	
-//	$scope.cancel = function() {
-//		var r = confirm('Are you sure you want to cancel?');
-//		if (r == true) {
-//			alert('Cancelled. Going back to Employees link..');
-//			console.log('Cancelled.');
-//			$location.path('/person');
-//		}
-//	};
-//	
-//	$scope.doAction = function(emp) {
-//		console.log('Do action for ' + JSON.stringify(emp) + ', action: ' + $scope.action);
-//		var empFullName = emp.lastName + ' ' + emp.firstName + ' ' + emp.middleName;
-//		if($scope.action == 'Hire') {
-//			MtnceCmpenService.add(emp, function() {
-//				alert('Successfully added ' + empFullName + '.');
-//				console.log('Added employee ' + empFullName);
-//				$location.path('/person');
-//			}, function() {
-//				alert('Oops! Something smelly happened back there. Adding of employee failed.');
-//			});
-//		}
-//		if($scope.action == 'Update') {
-//			console.log('Updating employee ' + empFullName);
-//			var href = $scope.emp._links.self.href;
-//			MtnceCmpenService.update({id: href.substring(href.lastIndexOf('/') + 1)}, emp, function() {
-//				alert('Successfully updated ' + empFullName + '.');
-//				console.log('Updated employee ' + empFullName);
-//				$location.path('/person');
-//			});
-//		}
-//	};
-//});
-//
-//minyoControllers.service('MtnceCmpenCache', function() {
-//	var action = '';
-//	var data = '';
-//	
-//	var setAction = function(a) {
-//		action = a;
-//	};
-//	
-//	var getAction = function(){
-//		return action;
-//	};
-//
-//	var setData = function(d) {
-//		data = d;
-//	}
-//	
-//	var getData = function() {
-//		return data;
-//	};
-//	
-//	return {
-//		setAction: setAction,
-//		getAction: getAction,
-//		setData: setData,
-//		getData: getData
-//	};
-//});
-//
-//
-//// Services
-//minyoServices.factory('MtnceCmpenService', function($resource){
-//	return  $resource('http://localhost:51000/payroll/api/organizations/:id', { id: '@id'}, 
-//			{ 
-//		query: { uri:'http://localhost:51000/payroll/api/organizations', 'method' : 'GET', isArray: false },
-//		get: { method : 'GET', isArray: false },
-//		add : { method : 'POST' },
-//		update: { method : 'PUT' },
-//		remove: { method: 'DELETE'}
-//	});
-//});
