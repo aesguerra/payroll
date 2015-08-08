@@ -4,14 +4,15 @@
 
 // Controllers
 minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, EmpService) {
-	$scope.data = {};
+	$scope.data = [];
 	
-	EmpService.EmpGetStar(function(data, status, headers, config) {
+	EmpService.empGetStar(function(data, status, headers, config) {
 		var empData = data._embedded['employees'];
 		$scope.data = [];		
 		for(d in empData) {
 			var empLink = empData[d]._links.person.href;
-			EmpService.Get(empLink, function(data2, status, headers, config) {
+			EmpService.get(empLink, function(data2, status, headers, config) {
+				console.log('empData[d].employeeNumber>> ' + empData[d].employeeNumber);
 				var temp = {
 					perLink: data2._links.self.href,
 					empLink: empLink,
@@ -21,7 +22,7 @@ minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, Emp
 					middleName: data2.middleName,
 					affix: data2.affix,
 					gender: data2.gender
-				}
+				};
 				$scope.data.push(temp);
 			}, errorResponse);
 		}
@@ -36,11 +37,13 @@ minyoControllers.controller('EmpCtrl', function($scope, $location, EmpCache, Emp
 		var empFullName = d.lastName + " " + d.firstName + " " + d.middleName;	
 		var r = confirm("Delete person " + empFullName + "?");
 		if (r == true) {
-			var href = d._links.self.href;
-			EmpService.remove({id: href.substring(href.lastIndexOf('/') + 1)}, function() {
-				alert('Person ' + empFullName + ' has been removed.');
-				$scope.data.splice(i, 1);
-			});
+			console.log(d.empLink + "~" + d.perLink);
+			EmpService.deleteRow(d.empLink, function(data, status, headers, config) {
+				EmpService.deleteRow(d.perLink, function(data, status, headers, config) {
+					alertAndLog('Person ' + empFullName + ' has been removed.');
+					$scope.data.splice(i, 1);
+				}, errorResponse);
+			}, errorResponse);
 		}
 	};
 	
@@ -56,8 +59,8 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 	
 	if($scope.action == 'Update') {
 		var links = EmpCache.getData();
-		EmpService.Get(links.per, function(data, status, headers, config) {
-			EmpService.Get(links.per + '/employee', function(data2, status, headers, config) {
+		EmpService.get(links.per, function(data, status, headers, config) {
+			EmpService.get(links.per + '/employee', function(data2, status, headers, config) {
 				$scope.per = data;
 				$scope.emp = data2;
 			}, errorResponse);
@@ -77,7 +80,7 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 		console.log('Action set to ' + JSON.stringify(d) + ', action: ' + $scope.action);
 		var perFullName = d.lastName + ' ' + d.firstName + ' ' + d.middleName;
 		if($scope.action == 'Hire') {
-			EmpService.AddPerson(d, function(data, status, headers, config) {
+			EmpService.addPerson(d, function(data, status, headers, config) {
 				var empData = {
 					employeeNumber: e.employeeNumber,
 					pagibig: e.pagibig,
@@ -96,8 +99,8 @@ minyoControllers.controller('EmpDetCtrl', function($scope, $location, EmpCache, 
 		}
 		if($scope.action == 'Update') {
 			console.log('Updating employee ' + perFullName);
-			EmpService.Update(d, function(data, status, headers, config) {
-				EmpService.Update(e, function(data, status, headers, config) {
+			EmpService.update(d, function(data, status, headers, config) {
+				EmpService.update(e, function(data, status, headers, config) {
 					alertAndLog('Successfully updated ' + perFullName + '.');
 					$location.path('/person');
 				}, errorResponse);
@@ -146,7 +149,7 @@ minyoServices.factory('EmpService', function($http){
 	var employees = URI + 'employees/';
 	
 	return { 
-		AddPerson: function(d, s, e) {
+		addPerson: function(d, s, e) {
 			var req = {
 				 method: 'POST',
 				 url: persons,
@@ -155,7 +158,7 @@ minyoServices.factory('EmpService', function($http){
 			
 			$http(req).success(s).error(e);
 		},
-		Hire: function(d, s, e) {
+		hire: function(d, s, e) {
 			var req = {
 				 method: 'POST',
 				 url: employees,
@@ -164,7 +167,7 @@ minyoServices.factory('EmpService', function($http){
 			
 			$http(req).success(s).error(e);
 		},
-		PerGetStar: function(s, e) {
+		perGetStar: function(s, e) {
 			var req = {
 				 method: 'GET',
 				 url: persons
@@ -172,7 +175,7 @@ minyoServices.factory('EmpService', function($http){
 			
 			$http(req).success(s).error(e);
 		},
-		EmpGetStar: function(s, e) {
+		empGetStar: function(s, e) {
 			var req = {
 				 method: 'GET',
 				 url: employees
@@ -180,7 +183,7 @@ minyoServices.factory('EmpService', function($http){
 			
 			$http(req).success(s).error(e);
 		},
-		Get: function(d, s, e) {
+		get: function(d, s, e) {
 			var req = {
 				 method: 'GET',
 				 url: d
@@ -188,7 +191,7 @@ minyoServices.factory('EmpService', function($http){
 			
 			$http(req).success(s).error(e);
 		},
-		Update: function(d, s, e) {
+		update: function(d, s, e) {
 			var req = {
 				 method: 'PATCH',
 				 url: d._links.self.href,
@@ -196,7 +199,7 @@ minyoServices.factory('EmpService', function($http){
 			};
 			$http(req).success(s).error(e);
 		},
-		Delete: function(d, s, e) {
+		deleteRow: function(d, s, e) {
 			var req = {
 				 method: 'DELETE',
 				 url: d.link,

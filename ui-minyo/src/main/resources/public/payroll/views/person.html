@@ -17,6 +17,7 @@
 					<thead>
 						<tr class="table-label">
 							<td>Action</td>
+							<td>Employee Number</td>
 							<td>Last Name</td>
 							<td>First Name</td>
 							<td>Middle Name</td>
@@ -30,6 +31,9 @@
 								<a role="button" ng-click="edit(d)"><span class="glyphicon glyphicon-edit"></span></a>
 								<a role="button" ng-click="removeRow($index, d)"><span class="glyphicon glyphicon-remove"></span></a>
 							</td>
+							<td ng-show="showPerLink">{{d.perLink}}</td>
+							<td ng-show="showEmpLink">{{d.empLink}}</td>
+							<td>{{d.empNo}}</td>
 							<td>{{d.lastName}}</td>
 							<td>{{d.firstName}}</td>
 							<td>{{d.middleName}}</td>

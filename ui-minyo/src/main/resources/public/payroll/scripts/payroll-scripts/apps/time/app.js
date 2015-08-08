@@ -3,11 +3,14 @@
  */
 
 // Controllers
-minyoControllers.controller('TimeCtrl', function($scope, $interval, $timeout, TimeTool) {
+minyoControllers.controller('TimeCtrl', function($scope, $interval, $timeout, TimeTool, TimeService) {
 	$scope.info = true;
 
 	$scope.punch = function() {
-    	alert("Employee number " + $scope.empNo + " has been logged at time " + $scope.currDateTime);
+		// ******Still not ok.. finish me
+		TimeService.punch($scope.empNo, function(data, status, headers, config) {
+			alert("Employee number " + $scope.empNo + " has been logged at time " + $scope.currDateTime);
+		}, errorResponse);
     };
     
     var onTimeout = function() {
@@ -39,3 +42,25 @@ minyoServices.factory('TimeTool', function() {
 		}
 	};
 });
+
+//Services
+minyoServices.factory('TimeService', function($http){
+	var URI = "http://localhost:51000/payroll/api/timeLogs/";
+	
+	return { 
+		// ***still not ok. finish me
+		punch: function(d, s, e) {
+			var req = {
+				 method: 'POST',
+				 url: URI + d
+			};
+			
+			$http(req).success(s).error(e);
+		}
+	};
+
+});
+
+var errorResponse = function(d) {
+	alertAndLog('Oops. Something smelly happened back there. Please try again.');
+}
